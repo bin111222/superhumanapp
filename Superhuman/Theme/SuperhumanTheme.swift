@@ -2,7 +2,9 @@ import SwiftUI
 
 enum SuperhumanTheme {
     static let cornerRadius: CGFloat = 15
-    static let primaryColor = Color("SuperhumanPrimary")
+    static let primaryColor = Color("SuperhumanAccent")
+    static let padding: CGFloat = 16
+    static let backgroundColor = Color.black.opacity(0.05)
     
     // Fonts
     static let titleFont = Font.system(.title, design: .rounded).bold()
