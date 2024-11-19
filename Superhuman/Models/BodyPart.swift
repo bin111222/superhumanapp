@@ -27,12 +27,12 @@ enum BodyPart: String, Codable, CaseIterable, Identifiable {
             return "Exercises for back health and sciatica relief"
         case .jaw:
             return "TMJ relief and relaxation techniques"
-        case .eyes:
-            return "Improves vision over time"
         case .hips:
             return "Glute activation and hip flexor strengthening"
         case .shoulders:
             return "Rotator cuff exercises and stability training"
+        case .eyes:
+            return "Eye exercises for improved vision and relaxation"
         }
     }
 } 

@@ -10,6 +10,7 @@ struct Exercise: Identifiable, Codable {
     let videoURL: URL?
     let steps: [String]
     let benefits: [String]
+    var completionDate: Date?
     
     enum Difficulty: String, Codable, CaseIterable {
         case beginner
@@ -41,7 +42,7 @@ struct Exercise: Identifiable, Codable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case id, name, bodyPart, description, difficulty, duration, videoURL, steps, benefits
+        case id, name, bodyPart, description, difficulty, duration, videoURL, steps, benefits, completionDate
     }
     
     init(id: UUID = UUID(), name: String, bodyPart: BodyPart, description: String, 

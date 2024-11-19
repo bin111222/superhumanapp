@@ -61,9 +61,8 @@ struct ContentView: View {
                         Image("LaunchLogo")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 200)
-                        
-                
+                            .frame(height: 50)
+                            .padding(.top, 18)
                     }
                 }
             }
@@ -83,6 +82,15 @@ struct ContentView: View {
             let navigationAppearance = UINavigationBarAppearance()
             navigationAppearance.configureWithOpaqueBackground()
             UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
+            
+            // Adjust navigation bar height
+            let navBarHeight: CGFloat = 44 // Standard navigation bar height
+            UINavigationBar.appearance().frame = CGRect(
+                x: 0,
+                y: 0,
+                width: UIScreen.main.bounds.width,
+                height: navBarHeight
+            )
         }
     }
 }

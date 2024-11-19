@@ -26,8 +26,7 @@ struct LoadingView: View {
                             .scaledToFit()
                             .frame(width: 200)
                             .scaleEffect(isAnimating ? 1.1 : 0.9)
-                        
-                       
+
                     }
                     .opacity(opacity)
                 }

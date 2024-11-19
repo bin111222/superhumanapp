@@ -75,6 +75,122 @@ struct ExerciseDatabase {
                 "Reduces tension"
             ]
         ),
+        Exercise(
+            name: "Wrist Extension",
+            bodyPart: .wrists,
+            description: "Strengthening exercise for wrist extensors",
+            difficulty: .intermediate,
+            duration: 240,
+            steps: [
+                "Hold arm straight with palm facing down",
+                "Lift hand upward, bending at wrist",
+                "Hold for 5 seconds",
+                "Perform 12 repetitions, 3 sets"
+            ],
+            benefits: [
+                "Strengthens wrist extensors",
+                "Improves grip strength",
+                "Helps prevent tennis elbow"
+            ]
+        ),
+        Exercise(
+            name: "Radial/Ulnar Deviation",
+            bodyPart: .wrists,
+            description: "Side-to-side wrist movements",
+            difficulty: .intermediate,
+            duration: 180,
+            steps: [
+                "Rest forearm on table with hand over edge",
+                "Move wrist side to side",
+                "Perform 15 repetitions each direction",
+                "Complete 3 sets"
+            ],
+            benefits: [
+                "Improves lateral wrist mobility",
+                "Strengthens stabilizer muscles",
+                "Enhances wrist control"
+            ]
+        ),
+        
+        Exercise(
+            name: "Wrist Pronation/Supination",
+            bodyPart: .wrists,
+            description: "Rotation exercise for forearm and wrist mobility",
+            difficulty: .intermediate,
+            duration: 240,
+            steps: [
+                "Hold arm out straight with palm down",
+                "Rotate forearm to turn palm up",
+                "Alternate between palm down and up",
+                "Perform 15 repetitions",
+                "Complete 3 sets"
+            ],
+            benefits: [
+                "Improves forearm rotation",
+                "Enhances wrist flexibility",
+                "Prevents repetitive strain"
+            ]
+        ),
+        Exercise(
+            name: "Tennis Ball Squeeze",
+            bodyPart: .wrists,
+            description: "Strengthening exercise for grip and wrist muscles",
+            difficulty: .beginner,
+            duration: 180,
+            steps: [
+                "Hold a tennis ball in hand",
+                "Squeeze ball firmly",
+                "Hold for 5 seconds",
+                "Release slowly",
+                "Repeat 15 times with each hand"
+            ],
+            benefits: [
+                "Strengthens grip",
+                "Improves hand endurance",
+                "Reduces risk of repetitive strain"
+            ]
+        ),
+
+        // NECK
+        Exercise(
+            name: "Head Tilts",
+            bodyPart: .neck,
+            description: "Side-to-side neck mobility exercise",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Sit with straight spine",
+                "Gently tilt head to right shoulder",
+                "Hold for 10 seconds",
+                "Return to center",
+                "Repeat on left side",
+                "Complete 5 repetitions each side"
+            ],
+            benefits: [
+                "Improves lateral neck mobility",
+                "Reduces neck stiffness",
+                "Enhances muscle flexibility"
+            ]
+        ),
+        Exercise(
+            name: "Neck Resistance",
+            bodyPart: .neck,
+            description: "Isometric exercise for neck strength",
+            difficulty: .intermediate,
+            duration: 300,
+            steps: [
+                "Place hand on forehead",
+                "Push head into hand while resisting movement",
+                "Hold for 10 seconds",
+                "Repeat with hand on back of head",
+                "Complete 3 sets in each direction"
+            ],
+            benefits: [
+                "Builds neck muscle strength",
+                "Improves neck stability",
+                "Helps prevent neck injuries"
+            ]
+        ),
 
         // NECK
         Exercise(
@@ -153,6 +269,85 @@ struct ExerciseDatabase {
                 "Improves flexibility"
             ]
         ),
+        Exercise(
+            name: "Neck Rotation",
+            bodyPart: .neck,
+            description: "Gentle rotational movements for neck mobility",
+            difficulty: .beginner,
+            duration: 300,
+            steps: [
+                "Sit with good posture",
+                "Slowly turn head to look over right shoulder",
+                "Hold for 10 seconds",
+                "Repeat on left side",
+                "Perform 5 repetitions each side"
+            ],
+            benefits: [
+                "Improves neck range of motion",
+                "Relieves muscle tension",
+                "Enhances cervical mobility"
+            ]
+        ),
+        Exercise(
+            name: "Neck Isometrics",
+            bodyPart: .neck,
+            description: "Resistance exercises for neck strength",
+            difficulty: .intermediate,
+            duration: 360,
+            steps: [
+                "Place hand on forehead",
+                "Push head into hand while resisting movement",
+                "Hold for 10 seconds",
+                "Repeat on sides and back",
+                "Perform 3 sets each direction"
+            ],
+            benefits: [
+                "Builds neck strength",
+                "Improves stability",
+                "Reduces risk of injury"
+            ]
+        ),
+        
+        Exercise(
+            name: "Head Tilts",
+            bodyPart: .neck,
+            description: "Side-to-side neck mobility exercise",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Sit with straight spine",
+                "Gently tilt head to right shoulder",
+                "Hold for 10 seconds",
+                "Return to center",
+                "Repeat on left side",
+                "Complete 5 repetitions each side"
+            ],
+            benefits: [
+                "Improves lateral neck mobility",
+                "Reduces neck stiffness",
+                "Enhances muscle flexibility"
+            ]
+        ),
+        Exercise(
+            name: "Neck Resistance",
+            bodyPart: .neck,
+            description: "Isometric exercise for neck strength",
+            difficulty: .intermediate,
+            duration: 300,
+            steps: [
+                "Place hand on forehead",
+                "Push head into hand while resisting movement",
+                "Hold for 10 seconds",
+                "Repeat with hand on back of head",
+                "Complete 3 sets in each direction"
+            ],
+            benefits: [
+                "Builds neck muscle strength",
+                "Improves neck stability",
+                "Helps prevent neck injuries"
+            ]
+        ),
+
 
         // PELVIC FLOOR
         Exercise(
@@ -229,6 +424,83 @@ struct ExerciseDatabase {
                 "Strengthens pelvic floor",
                 "Enhances core stability",
                 "Improves glute strength"
+            ]
+        ),
+        Exercise(
+            name: "Elevator Kegels",
+            bodyPart: .genitals,
+            description: "Progressive pelvic floor engagement",
+            difficulty: .intermediate,
+            duration: 300,
+            steps: [
+                "Imagine pelvic floor as elevator",
+                "Contract muscles progressively higher",
+                "Release progressively lower",
+                "Perform 10 complete 'elevations'",
+                "Rest between sets"
+            ],
+            benefits: [
+                "Improves muscle control",
+                "Enhances awareness",
+                "Strengthens deep muscles"
+            ]
+        ),
+        Exercise(
+            name: "Pelvic Tilts",
+            bodyPart: .genitals,
+            description: "Combined core and pelvic floor exercise",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Lie on back with knees bent",
+                "Tilt pelvis to flatten lower back",
+                "Engage pelvic floor muscles",
+                "Hold for 5 seconds",
+                "Perform 10 repetitions"
+            ],
+            benefits: [
+                "Coordinates muscle groups",
+                "Improves posture",
+                "Strengthens core connection"
+            ]
+        ),
+        
+        Exercise(
+            name: "Standing Pelvic Tilts",
+            bodyPart: .genitals,
+            description: "Dynamic pelvic floor engagement exercise",
+            difficulty: .intermediate,
+            duration: 240,
+            steps: [
+                "Stand with feet hip-width apart",
+                "Gently tilt pelvis forward and back",
+                "Engage pelvic floor muscles during movement",
+                "Perform 15 repetitions",
+                "Complete 3 sets"
+            ],
+            benefits: [
+                "Improves core stability",
+                "Enhances pelvic floor control",
+                "Promotes better posture"
+            ]
+        ),
+        Exercise(
+            name: "Seated Pelvic Floor Pulses",
+            bodyPart: .genitals,
+            description: "Rhythmic pelvic floor muscle contractions",
+            difficulty: .intermediate,
+            duration: 180,
+            steps: [
+                "Sit on a firm chair",
+                "Perform quick, light pelvic floor contractions",
+                "Pulse for 30 seconds",
+                "Rest for 10 seconds",
+                "Repeat 3 sets"
+            ],
+            benefits: [
+                "Increases muscle endurance",
+                "Improves muscle tone",
+                "Enhances neuromuscular control"
             ]
         ),
 
@@ -308,6 +580,45 @@ struct ExerciseDatabase {
                 "Strengthens ankle muscles",
                 "Improves mobility",
                 "Prevents injuries"
+            ]
+        ),
+        
+        Exercise(
+            name: "Standing Balance",
+            bodyPart: .ankles,
+            description: "Single-leg balance for ankle stability",
+            difficulty: .intermediate,
+            duration: 300,
+            steps: [
+                "Stand on one leg",
+                "Hold position for 30 seconds",
+                "Switch legs",
+                "Use wall for support if needed",
+                "Repeat 3 times each leg"
+            ],
+            benefits: [
+                "Improves ankle stability",
+                "Enhances proprioception",
+                "Strengthens supporting muscles"
+            ]
+        ),
+        Exercise(
+            name: "Walking on Heels",
+            bodyPart: .ankles,
+            description: "Ankle and lower leg strength exercise",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Walk 10 steps on heels",
+                "Keep toes lifted off ground",
+                "Maintain straight legs",
+                "Return to normal walking",
+                "Repeat 3 times"
+            ],
+            benefits: [
+                "Strengthens ankle muscles",
+                "Improves ankle mobility",
+                "Enhances lower leg strength"
             ]
         ),
 
@@ -391,6 +702,47 @@ struct ExerciseDatabase {
                 "Reduces knee pain"
             ]
         ),
+        
+        Exercise(
+            name: "Standing Hip Circles",
+            bodyPart: .hips,
+            description: "Dynamic mobility exercise for hips",
+            difficulty: .beginner,
+            duration: 180,
+            steps: [
+                "Stand on one leg",
+                "Rotate other leg in large circles",
+                "10 circles clockwise",
+                "10 circles counterclockwise",
+                "Switch legs"
+            ],
+            benefits: [
+                "Improves hip mobility",
+                "Reduces hip stiffness",
+                "Enhances joint flexibility"
+            ]
+        ),
+        Exercise(
+            name: "Standing Hip Abduction",
+            bodyPart: .hips,
+            description: "Lateral hip strengthening exercise",
+            difficulty: .intermediate,
+            duration: 240,
+            steps: [
+                "Stand with feet together",
+                "Lift leg out to side",
+                "Hold for 2 seconds",
+                "Lower slowly",
+                "Perform 15 repetitions per leg",
+                "Complete 3 sets"
+            ],
+            benefits: [
+                "Strengthens hip muscles",
+                "Improves lateral stability",
+                "Reduces risk of hip injuries"
+            ]
+        ),
+
 
         // SHOULDERS
         Exercise(
@@ -468,6 +820,66 @@ struct ExerciseDatabase {
                 "Prevents injuries"
             ]
         ),
+        Exercise(
+            name: "External Rotation",
+            bodyPart: .shoulders,
+            description: "Strengthening for rotator cuff",
+            difficulty: .intermediate,
+            duration: 360,
+            steps: [
+                "Stand with elbow at side, bent 90°",
+                "Rotate arm outward",
+                "Control movement back",
+                "Perform 15 repetitions each arm",
+                "Complete 3 sets"
+            ],
+            benefits: [
+                "Strengthens rotator cuff",
+                "Improves shoulder stability",
+                "Prevents injury"
+            ]
+        ),
+        
+        Exercise(
+            name: "Arm Circles",
+            bodyPart: .shoulders,
+            description: "Dynamic warm-up for shoulder mobility",
+            difficulty: .beginner,
+            duration: 180,
+            steps: [
+                "Stand with arms extended",
+                "Make small forward circles",
+                "10 circles forward",
+                "10 circles backward",
+                "Gradually increase circle size",
+                "Repeat 3 sets"
+            ],
+            benefits: [
+                "Increases shoulder mobility",
+                "Warms up shoulder joints",
+                "Improves range of motion"
+            ]
+        ),
+        Exercise(
+            name: "Shoulder Blade Squeeze",
+            bodyPart: .shoulders,
+            description: "Posture and upper back strengthening",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Stand or sit with straight back",
+                "Squeeze shoulder blades together",
+                "Hold for 5 seconds",
+                "Release slowly",
+                "Repeat 15 times"
+            ],
+            benefits: [
+                "Improves posture",
+                "Strengthens upper back",
+                "Reduces shoulder tension"
+            ]
+        ),
+
 
         // LOWER BACK
         Exercise(
@@ -544,6 +956,84 @@ struct ExerciseDatabase {
                 "Stretches lower back",
                 "Improves hamstring flexibility",
                 "Reduces tension"
+            ]
+        ),
+        Exercise(
+            name: "Cat-Cow Stretch",
+            bodyPart: .lowerBack,
+            description: "Spinal mobility exercise",
+            difficulty: .beginner,
+            duration: 300,
+            steps: [
+                "Start on hands and knees",
+                "Arch back upward (Cat)",
+                "Sag back downward (Cow)",
+                "Move slowly between positions",
+                "Perform 10 repetitions"
+            ],
+            benefits: [
+                "Improves spinal mobility",
+                "Relieves back tension",
+                "Enhances core awareness"
+            ]
+        ),
+        Exercise(
+            name: "Bird Dog",
+            bodyPart: .lowerBack,
+            description: "Stability exercise for back and core",
+            difficulty: .intermediate,
+            duration: 360,
+            steps: [
+                "Start on hands and knees",
+                "Extend opposite arm and leg",
+                "Hold for 10 seconds",
+                "Alternate sides",
+                "Perform 8 repetitions each side"
+            ],
+            benefits: [
+                "Strengthens back muscles",
+                "Improves balance",
+                "Enhances core stability"
+            ]
+        ),
+        
+        Exercise(
+            name: "Supermans",
+            bodyPart: .lowerBack,
+            description: "Back extension exercise for core strength",
+            difficulty: .intermediate,
+            duration: 300,
+            steps: [
+                "Lie face down on floor",
+                "Simultaneously lift arms and legs",
+                "Hold for 3 seconds",
+                "Lower back down",
+                "Repeat 12 times",
+                "Complete 3 sets"
+            ],
+            benefits: [
+                "Strengthens lower back",
+                "Improves core stability",
+                "Enhances spinal muscle endurance"
+            ]
+        ),
+        Exercise(
+            name: "Prone Back Extensions",
+            bodyPart: .lowerBack,
+            description: "Gentle back strengthening exercise",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Lie face down, arms by sides",
+                "Lift upper body slightly off ground",
+                "Hold for 5 seconds",
+                "Lower back down",
+                "Repeat 10 times"
+            ],
+            benefits: [
+                "Reduces lower back pain",
+                "Improves back muscle strength",
+                "Enhances posture"
             ]
         ),
 
@@ -624,6 +1114,81 @@ struct ExerciseDatabase {
                 "Enhances function"
             ]
         ),
+        Exercise(
+            name: "Jaw Relaxation",
+            bodyPart: .jaw,
+            description: "Gentle exercises for TMJ relief",
+            difficulty: .beginner,
+            duration: 180,
+            steps: [
+                "Rest tongue on roof of mouth",
+                "Allow jaw to relax completely",
+                "Create small gap between teeth",
+                "Hold for 30 seconds",
+                "Repeat 5 times"
+            ],
+            benefits: [
+                "Reduces TMJ tension",
+                "Relieves jaw pain",
+                "Promotes proper jaw alignment"
+            ]
+        ),
+        Exercise(
+            name: "Jaw Stretches",
+            bodyPart: .jaw,
+            description: "Stretching exercises for jaw mobility",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Open mouth slowly and widely",
+                "Hold for 5 seconds",
+                "Close mouth slowly",
+                "Repeat 10 times"
+            ],
+            benefits: [
+                "Improves jaw mobility",
+                "Reduces clicking sounds",
+                "Relieves muscle tension"
+            ]
+        ),
+        
+        Exercise(
+            name: "Tongue Press",
+            bodyPart: .jaw,
+            description: "TMJ relief and jaw muscle relaxation",
+            difficulty: .beginner,
+            duration: 180,
+            steps: [
+                "Press tongue against roof of mouth",
+                "Hold for 5 seconds",
+                "Release and relax",
+                "Repeat 10 times"
+            ],
+            benefits: [
+                "Reduces jaw tension",
+                "Improves jaw muscle control",
+                "Promotes relaxation"
+            ]
+        ),
+        Exercise(
+            name: "Neck and Jaw Stretch",
+            bodyPart: .jaw,
+            description: "Combined neck and jaw mobility exercise",
+            difficulty: .intermediate,
+            duration: 240,
+            steps: [
+                "Gently turn head to right",
+                "Place hand on jaw for gentle resistance",
+                "Hold for 10 seconds",
+                "Return to center",
+                "Repeat on left side"
+            ],
+            benefits: [
+                "Improves jaw and neck mobility",
+                "Reduces muscle tension",
+                "Enhances range of motion"
+            ]
+        ),
 
         // EYES
         Exercise(
@@ -681,6 +1246,47 @@ struct ExerciseDatabase {
                 "Improves circulation"
             ]
         ),
+        
+        Exercise(
+            name: "Near-Far Focus",
+            bodyPart: .eyes,
+            description: "Eye focusing and coordination exercise",
+            difficulty: .beginner,
+            duration: 240,
+            steps: [
+                "Hold thumb 6 inches from face",
+                "Focus on thumb for 5 seconds",
+                "Look at distant object",
+                "Alternate focus every 5 seconds",
+                "Repeat for 2 minutes"
+            ],
+            benefits: [
+                "Improves eye muscle flexibility",
+                "Reduces eye strain",
+                "Enhances focus control"
+            ]
+        ),
+        
+        Exercise(
+            name: "Pencil Push-Ups",
+            bodyPart: .eyes,
+            description: "Convergence exercise for eye coordination",
+            difficulty: .beginner,
+            duration: 180,
+            steps: [
+                "Hold pencil at arm's length",
+                "Slowly bring pencil closer to nose",
+                "Keep pencil in focus",
+                "Stop when double vision occurs",
+                "Repeat 10 times"
+            ],
+            benefits: [
+                "Improves eye muscle coordination",
+                "Reduces eye strain",
+                "Enhances near-vision focus"
+            ]
+        ),
+        
         Exercise(
             name: "Figure Eight",
             bodyPart: .eyes,

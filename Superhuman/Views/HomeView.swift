@@ -4,7 +4,6 @@ struct HomeView: View {
     @EnvironmentObject private var appSettings: AppSettings
     @State private var dailyQuote: Quote
     @State private var completedBodyParts: Set<BodyPart> = []
-    @State private var showingExercise = false
     @State private var selectedExercise: Exercise?
     
     init() {
@@ -14,70 +13,70 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Daily Challenge Header
-                    challengeHeader
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 16) {
+                    // Challenge Header
+                    VStack(spacing: 8) {
+                        Text("Complete Today's Movements")
+                            .font(.system(.title2, design: .rounded).bold())
+                            .frame(maxWidth: .infinity)
+                        
+                        Text("\(completedBodyParts.count)/\(BodyPart.allCases.count) body parts")
+                            .font(.system(.headline, design: .rounded))
+                            .foregroundColor(.gray)
+                        
+                        // Animated Progress Bar
+                        FluidProgressBar(progress: Double(completedBodyParts.count) / Double(BodyPart.allCases.count))
+                            .frame(height: 12)
+                            .padding(.horizontal)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
+                    .background(Color.white.opacity(0.05))
+                    .cornerRadius(16)
                     
                     // Body Parts Grid
-                    bodyPartsGrid
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 12) {
+                        ForEach(BodyPart.allCases) { bodyPart in
+                            BodyPartCard(
+                                bodyPart: bodyPart,
+                                isCompleted: completedBodyParts.contains(bodyPart)
+                            )
+                            .onTapGesture {
+                                if !completedBodyParts.contains(bodyPart) {
+                                    selectRandomExercise(for: bodyPart)
+                                }
+                            }
+                        }
+                    }
                     
                     // Daily Quote Card
                     QuoteCard(quote: dailyQuote)
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 8)
             }
-            .navigationTitle("Daily Challenge")
-            .sheet(isPresented: $showingExercise) {
-                if let exercise = selectedExercise {
-                    NavigationView {
-                        ExerciseDetailView(exercise: exercise)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("Complete") {
-                                        completeExercise(for: exercise.bodyPart)
-                                        showingExercise = false
-                                    }
+            .navigationTitle("Daily Movement Challenge")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $selectedExercise) { exercise in
+                NavigationView {
+                    ExerciseDetailView(exercise: exercise)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Complete") {
+                                    completeExercise(for: exercise.bodyPart)
+                                    selectedExercise = nil
                                 }
                             }
-                    }
-                }
-            }
-        }
-    }
-    
-    private var challengeHeader: some View {
-        VStack(spacing: 12) {
-            Text("Complete Today's Challenge")
-                .font(.title2.bold())
-            
-            Text("\(completedBodyParts.count)/\(BodyPart.allCases.count) body parts")
-                .font(.headline)
-                .foregroundColor(.gray)
-            
-            ProgressBar(progress: Double(completedBodyParts.count) / Double(BodyPart.allCases.count))
-                .frame(height: 8)
-                .padding(.horizontal)
-        }
-        .padding()
-        .background(Color.white.opacity(0.05))
-        .cornerRadius(16)
-    }
-    
-    private var bodyPartsGrid: some View {
-        LazyVGrid(columns: [
-            GridItem(.flexible()),
-            GridItem(.flexible())
-        ], spacing: 16) {
-            ForEach(BodyPart.allCases) { bodyPart in
-                BodyPartCard(
-                    bodyPart: bodyPart,
-                    isCompleted: completedBodyParts.contains(bodyPart)
-                )
-                .onTapGesture {
-                    if !completedBodyParts.contains(bodyPart) {
-                        selectRandomExercise(for: bodyPart)
-                    }
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("Close") {
+                                    selectedExercise = nil
+                                }
+                            }
+                        }
                 }
             }
         }
@@ -85,27 +84,107 @@ struct HomeView: View {
     
     private func selectRandomExercise(for bodyPart: BodyPart) {
         let exercises = ExerciseDatabase.exercises.filter { $0.bodyPart == bodyPart }
-        selectedExercise = exercises.randomElement()
-        showingExercise = true
+        if let randomExercise = exercises.randomElement() {
+            selectedExercise = randomExercise
+        }
     }
     
     private func completeExercise(for bodyPart: BodyPart) {
         withAnimation {
             completedBodyParts.insert(bodyPart)
+            if let exercise = selectedExercise {
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("ExerciseCompleted"),
+                    object: exercise
+                )
+            }
         }
     }
 }
 
 // MARK: - Supporting Views
+struct FluidProgressBar: View {
+    let progress: Double
+    @State private var phase = 0.0
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                // Background
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(Color.gray.opacity(0.3))
+                
+                // Animated Progress
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                SuperhumanTheme.primaryColor,
+                                SuperhumanTheme.primaryColor.opacity(0.7),
+                                SuperhumanTheme.primaryColor
+                            ]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: geometry.size.width * progress)
+                    .overlay(
+                        Wave(phase: phase, width: geometry.size.width * progress)
+                            .fill(Color.white.opacity(0.2))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                    )
+            }
+        }
+        .onAppear {
+            withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
+                phase = .pi * 2
+            }
+        }
+    }
+}
+
+struct Wave: Shape {
+    var phase: Double
+    var width: Double
+    var amplitude: CGFloat = 5
+    var frequency: CGFloat = 10
+    
+    var animatableData: Double {
+        get { phase }
+        set { phase = newValue }
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let height = rect.height
+        let midHeight = height / 2
+        
+        path.move(to: CGPoint(x: 0, y: midHeight))
+        
+        for x in stride(from: 0, through: width, by: 1) {
+            let relativeX = x / width
+            let sine = sin(relativeX * frequency + phase)
+            let y = midHeight + sine * amplitude
+            path.addLine(to: CGPoint(x: x, y: y))
+        }
+        
+        path.addLine(to: CGPoint(x: width, y: height))
+        path.addLine(to: CGPoint(x: 0, y: height))
+        path.closeSubpath()
+        
+        return path
+    }
+}
+
 struct BodyPartCard: View {
     let bodyPart: BodyPart
     let isCompleted: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(bodyPart.rawValue)
-                    .font(.headline)
+                    .font(.system(.headline, design: .rounded))
                 
                 Spacer()
                 
@@ -116,16 +195,16 @@ struct BodyPartCard: View {
             }
             
             bodyPartIcon
-                .font(.system(size: 30))
-                .foregroundColor(isCompleted ? .gray : SuperhumanTheme.primaryColor)
+                .font(.system(size: 32))
+                .foregroundColor(isCompleted ? .gray : iconColor)
             
             Text(bodyPart.description)
-                .font(.caption)
+                .font(.system(.caption, design: .rounded))
                 .foregroundColor(.gray)
                 .lineLimit(2)
         }
-        .padding()
-        .frame(height: 150)
+        .padding(12)
+        .frame(height: 130)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white.opacity(0.05))
@@ -142,38 +221,40 @@ struct BodyPartCard: View {
     
     private var bodyPartIcon: some View {
         Image(systemName: iconName(for: bodyPart))
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(iconColor, iconSecondaryColor)
+    }
+    
+    private var iconColor: Color {
+        switch bodyPart {
+        case .wrists: return .blue
+        case .neck: return .purple
+        case .genitals: return .pink
+        case .ankles: return .green
+        case .lowerBack: return .orange
+        case .jaw: return .red
+        case .hips: return .yellow
+        case .shoulders: return .mint
+        case .eyes: return .indigo
+        }
+    }
+    
+    private var iconSecondaryColor: Color {
+        iconColor.opacity(0.3)
     }
     
     private func iconName(for bodyPart: BodyPart) -> String {
         switch bodyPart {
-        case .wrists: return "hand.raised"
-        case .neck: return "person.bust"
-        case .genitals: return "figure.walk"
-        case .ankles: return "figure.walk.motion"
-        case .lowerBack: return "figure.walk.arrival"
-        case .jaw: return "mouth"
-        case .hips: return "figure.walk.departure"
+        case .wrists: return "hand.raised.fill"
+        case .neck: return "person.bust.fill"
+        case .genitals: return "figure.walk.motion"
+        case .ankles: return "figure.walk.circle.fill"
+        case .lowerBack: return "figure.walk.arrival.fill"
+        case .jaw: return "mouth.fill"
+        case .hips: return "figure.dance"
         case .shoulders: return "figure.arms.open"
-        case .eyes: return "eye"
+        case .eyes: return "eye.fill"
         }
-    }
-}
-
-struct ProgressBar: View {
-    let progress: Double
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                
-                Rectangle()
-                    .fill(SuperhumanTheme.primaryColor)
-                    .frame(width: geometry.size.width * progress)
-            }
-        }
-        .cornerRadius(4)
     }
 }
 
@@ -183,20 +264,27 @@ struct QuoteCard: View {
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "quote.bubble.fill")
-                .font(.system(size: 30))
-                .foregroundColor(SuperhumanTheme.primaryColor)
+                .font(.system(size: 32))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [SuperhumanTheme.primaryColor, SuperhumanTheme.primaryColor.opacity(0.7)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
             
             Text(quote.text)
-                .font(.system(.body, design: .serif))
-                .multilineTextAlignment(.center)
+                .font(.system(.body, design: .serif, weight: .medium))
                 .italic()
+                .multilineTextAlignment(.center)
                 .padding(.horizontal)
+                .foregroundColor(.white)
             
             Text("— \(quote.author)")
-                .font(.system(.subheadline, design: .serif))
+                .font(.system(.subheadline, design: .serif, weight: .light))
                 .foregroundColor(.gray)
         }
-        .padding(.vertical, 24)
+        .padding(.vertical, 20)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: SuperhumanTheme.cornerRadius)
@@ -205,7 +293,17 @@ struct QuoteCard: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: SuperhumanTheme.cornerRadius)
-                .stroke(SuperhumanTheme.primaryColor.opacity(0.1), lineWidth: 1)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            SuperhumanTheme.primaryColor.opacity(0.5),
+                            SuperhumanTheme.primaryColor.opacity(0.1)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
         )
     }
 }

@@ -6,22 +6,25 @@ class ProfileViewModel: ObservableObject {
     @Published var isEditMode = false
     
     init() {
-        // TODO: Load from UserDefaults or backend
-        self.profile = UserProfile(
-            name: "John Doe",
-            email: "john@example.com",
-            age: 30,
-            height: 175,
-            weight: 70,
-            fitnessLevel: .intermediate,
-            notificationsEnabled: true,
-            preferredWorkoutTime: Calendar.current.date(from: DateComponents(hour: 8, minute: 0)) ?? Date()
-        )
+        if let savedProfile = UserDefaultsManager.shared.loadUserProfile() {
+            self.profile = savedProfile
+        } else {
+            // Provide default profile if none exists
+            self.profile = UserProfile(
+                name: "",
+                email: "",
+                age: 0,
+                height: 170,
+                weight: 70,
+                fitnessLevel: .beginner,
+                notificationsEnabled: true,
+                preferredWorkoutTime: Date()
+            )
+        }
     }
     
     func updateProfile() {
-        // TODO: Save to UserDefaults or backend
-        print("Profile updated")
+        UserDefaultsManager.shared.saveUserProfile(profile)
     }
     
     func signOut() {
