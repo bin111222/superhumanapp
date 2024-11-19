@@ -1,17 +1,14 @@
 import SwiftUI
 
 enum SuperhumanTheme {
-    static let primaryColor = Color("PrimaryColor")
-    static let secondaryColor = Color("SecondaryColor")
-    static let backgroundColor = Color("BackgroundColor")
-    static let textColor = Color("TextColor")
+    static let cornerRadius: CGFloat = 15
+    static let primaryColor = Color("SuperhumanPrimary")
     
-    static let padding: CGFloat = 16
-    static let cornerRadius: CGFloat = 12
-    
-    static let titleFont = Font.system(.title, design: .rounded).weight(.bold)
+    // Fonts
+    static let titleFont = Font.system(.title, design: .rounded).bold()
     static let headlineFont = Font.system(.headline, design: .rounded)
     static let bodyFont = Font.system(.body, design: .rounded)
+    static let captionFont = Font.system(.caption, design: .rounded)
 }
 
 struct SuperhumanCard: ViewModifier {

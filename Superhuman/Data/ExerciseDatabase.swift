@@ -1304,7 +1304,388 @@ struct ExerciseDatabase {
                 "Reduces eye fatigue",
                 "Enhances coordination"
             ]
+        ),
+        
+
+        // Advanced Difficulty Exercises
+
+        // WRISTS
+        Exercise(
+            name: "Weighted Wrist Roller Complex",
+            bodyPart: .wrists,
+            description: "Advanced grip and forearm strength challenge",
+            difficulty: .advanced,
+            duration: 480,
+            steps: [
+                "Use a weighted wrist roller with 10-15 lbs",
+                "Roll weight up using only wrist movement",
+                "Alternate between pronation and supination",
+                "Complete full rotation without dropping weight",
+                "Perform 3 complete up and down cycles",
+                "Rest 1 minute between sets"
+            ],
+            benefits: [
+                "Extreme grip strength development",
+                "Advanced forearm muscle conditioning",
+                "Enhances neuromuscular wrist control"
+            ]
+        ),
+        Exercise(
+            name: "Planche Wrist Preparation",
+            bodyPart: .wrists,
+            description: "Advanced isometric wrist strengthening",
+            difficulty: .advanced,
+            duration: 600,
+            steps: [
+                "Start in push-up position with fingers pointing backward",
+                "Shift weight forward, maintaining straight arms",
+                "Hold position with maximum wrist extension",
+                "Progressively increase hold time",
+                "Perform 5 sets of 45-second holds",
+                "Rest 2 minutes between sets"
+            ],
+            benefits: [
+                "Extreme wrist strength and resilience",
+                "Prepares for advanced gymnastic movements",
+                "Develops extraordinary joint stability"
+            ]
+        ),
+
+        // NECK
+        Exercise(
+            name: "Dynamic Neck Bridge",
+            bodyPart: .neck,
+            description: "Advanced neck strength and mobility exercise",
+            difficulty: .advanced,
+            duration: 420,
+            steps: [
+                "Begin in wrestler's bridge position",
+                "Slowly roll head side to side",
+                "Maintain constant bridge tension",
+                "Progress to full neck bridge movements",
+                "Perform 15 side-to-side rotations",
+                "Complete 3 sets with 2-minute rest"
+            ],
+            benefits: [
+                "Extreme neck strength development",
+                "Advanced proprioceptive training",
+                "Significant mobility enhancement"
+            ]
+        ),
+        Exercise(
+            name: "Resistance Band Neck Progression",
+            bodyPart: .neck,
+            description: "Multi-directional neck resistance training",
+            difficulty: .advanced,
+            duration: 480,
+            steps: [
+                "Secure heavy resistance band at head height",
+                "Perform resistance movements in all directions",
+                "Include forward, backward, and rotational resistance",
+                "Maintain perfect spine alignment",
+                "3 sets of 20 repetitions per direction",
+                "Use maximum tolerable resistance"
+            ],
+            benefits: [
+                "Comprehensive neck muscle development",
+                "Advanced injury prevention protocols",
+                "Extreme multi-planar strength"
+            ]
+        ),
+
+        // PELVIC FLOOR
+        Exercise(
+            name: "Advanced Stability Ball Pelvic Integration",
+            bodyPart: .genitals,
+            description: "Complex pelvic floor and core stabilization",
+            difficulty: .advanced,
+            duration: 600,
+            steps: [
+                "Balance on stability ball in half-kneeling position",
+                "Perform simultaneous pelvic floor contraction",
+                "Maintain perfect balance while changing arm positions",
+                "Include weight shifting and dynamic movements",
+                "Hold each variation for 45 seconds",
+                "Complete 4 different challenging positions"
+            ],
+            benefits: [
+                "Extreme core and pelvic floor coordination",
+                "Advanced neuromuscular control",
+                "Comprehensive stability enhancement"
+            ]
+        ),
+        Exercise(
+            name: "Plyometric Pelvic Floor Engagement",
+            bodyPart: .genitals,
+            description: "High-intensity pelvic floor conditioning",
+            difficulty: .advanced,
+            duration: 480,
+            steps: [
+                "Perform explosive jump squats",
+                "Integrate maximum pelvic floor contraction during landing",
+                "Maintain precise muscle engagement",
+                "Include varying jump heights and directions",
+                "Perform 5 sets of 15 repetitions",
+                "Minimal rest between sets"
+            ],
+            benefits: [
+                "Explosive pelvic floor strength",
+                "Advanced dynamic muscle control",
+                "Enhanced athletic performance integration"
+            ]
+        ),
+
+        // ANKLES
+        Exercise(
+            name: "Multi-Plane Instability Platform Training",
+            bodyPart: .ankles,
+            description: "Advanced ankle stability and proprioception",
+            difficulty: .advanced,
+            duration: 540,
+            steps: [
+                "Use unstable surface like BOSU or balance board",
+                "Perform complex single-leg movements",
+                "Include weight shifts, rotations, and dynamic loads",
+                "Maintain perfect balance during challenging sequences",
+                "3 sets of 90-second continuous challenges",
+                "Progress with added weights or closed eyes"
+            ],
+            benefits: [
+                "Extreme ankle joint stability",
+                "Advanced neuromuscular adaptation",
+                "Comprehensive injury prevention"
+            ]
+        ),
+        Exercise(
+            name: "Advanced Plyometric Ankle Conditioning",
+            bodyPart: .ankles,
+            description: "High-intensity ankle strength and reactivity",
+            difficulty: .advanced,
+            duration: 600,
+            steps: [
+                "Perform depth jumps from elevated platforms",
+                "Focus on minimal ground contact time",
+                "Include multi-directional explosive movements",
+                "Maintain perfect landing mechanics",
+                "5 sets of 12 complex jumps",
+                "Progressively increase jump height and complexity"
+            ],
+            benefits: [
+                "Explosive ankle power development",
+                "Advanced shock absorption capabilities",
+                "Elite athletic performance enhancement"
+            ]
+        ),
+
+        // HIPS
+        Exercise(
+            name: "Advanced Kettlebell Mobility Flow",
+            bodyPart: .hips,
+            description: "Complex hip mobility and strength integration",
+            difficulty: .advanced,
+            duration: 600,
+            steps: [
+                "Use heavy kettlebell for dynamic mobility sequences",
+                "Perform continuous flow between Turkish get-ups",
+                "Include windmills, figure-8s, and rotational movements",
+                "Maintain perfect form under high complexity",
+                "3 sets of 10-minute continuous flow",
+                "Alternate dominant and non-dominant sides"
+            ],
+            benefits: [
+                "Extreme hip mobility and strength",
+                "Advanced movement pattern integration",
+                "Comprehensive joint conditioning"
+            ]
+        ),
+        Exercise(
+            name: "Pistol Squat Progression",
+            bodyPart: .hips,
+            description: "Ultimate single-leg strength and stability",
+            difficulty: .advanced,
+            duration: 480,
+            steps: [
+                "Perform full range single-leg squats",
+                "Progress to weighted and elevated variations",
+                "Include pause and tempo modifications",
+                "Maintain perfect alignment and control",
+                "4 sets of 8 repetitions per leg",
+                "Add complexity with external loads"
+            ],
+            benefits: [
+                "Extreme lower body strength",
+                "Advanced unilateral movement mastery",
+                "Comprehensive hip and leg conditioning"
+            ]
+        ),
+
+        // SHOULDERS
+        Exercise(
+            name: "Advanced Shoulder Stability Complex",
+            bodyPart: .shoulders,
+            description: "Multi-plane shoulder strength and mobility",
+            difficulty: .advanced,
+            duration: 540,
+            steps: [
+                "Use rings or suspension trainers",
+                "Perform complex gymnastic-style shoulder movements",
+                "Include skin the cats, muscle-ups, and inverted holds",
+                "Maintain perfect control and alignment",
+                "3 sets of 10-minute continuous movement",
+                "Progress with increased complexity and time under tension"
+            ],
+            benefits: [
+                "Extreme shoulder joint resilience",
+                "Advanced movement pattern integration",
+                "Comprehensive shoulder girdle conditioning"
+            ]
+        ),
+        Exercise(
+            name: "Heavy Overhead Stability Challenge",
+            bodyPart: .shoulders,
+            description: "Ultimate shoulder strength and stabilization",
+            difficulty: .advanced,
+            duration: 600,
+            steps: [
+                "Perform overhead lifts with maximal loads",
+                "Include standing and seated variations",
+                "Maintain perfect vertical alignment",
+                "Progressively increase time under tension",
+                "4 sets of complex overhead hold sequences",
+                "Integrate unstable surface challenges"
+            ],
+            benefits: [
+                "Extreme overhead strength development",
+                "Advanced joint stability enhancement",
+                "Elite athletic shoulder performance"
+            ]
+        ),
+
+        // LOWER BACK
+        Exercise(
+            name: "Advanced Spinal Mobility Complex",
+            bodyPart: .lowerBack,
+            description: "Comprehensive spinal conditioning",
+            difficulty: .advanced,
+            duration: 540,
+            steps: [
+                "Perform advanced spine mobility flows",
+                "Include complex twisting and extension sequences",
+                "Use controlled, slow movements",
+                "Maintain perfect segmental spinal control",
+                "3 sets of 15-minute continuous movement",
+                "Progress with added resistance and complexity"
+            ],
+            benefits: [
+                "Extreme spinal mobility",
+                "Advanced neuromuscular control",
+                "Comprehensive back conditioning"
+            ]
+        ),
+        Exercise(
+            name: "Heavy Deadlift Progression",
+            bodyPart: .lowerBack,
+            description: "Ultimate lower back and posterior chain strength",
+            difficulty: .advanced,
+            duration: 480,
+            steps: [
+                "Perform complex deadlift variations",
+                "Include deficit, pause, and tempo modifications",
+                "Use maximal loads with perfect technique",
+                "Integrate different grip and stance variations",
+                "4 sets of 5 repetitions with progressive overload",
+                "Maintain extreme technical precision"
+            ],
+            benefits: [
+                "Extreme posterior chain strength",
+                "Advanced biomechanical adaptation",
+                "Elite strength development"
+            ]
+        ),
+
+        // JAW
+        Exercise(
+            name: "Advanced TMJ Mobility Protocol",
+            bodyPart: .jaw,
+            description: "Comprehensive jaw mobility and tension release",
+            difficulty: .advanced,
+            duration: 420,
+            steps: [
+                "Perform complex jaw mobilization techniques",
+                "Include myofascial release and muscle energy techniques",
+                "Use precise, controlled movements",
+                "Integrate breathing and relaxation protocols",
+                "3 sets of 10-minute continuous work",
+                "Progress with increased complexity"
+            ],
+            benefits: [
+                "Extreme jaw mobility",
+                "Advanced tension release",
+                "Comprehensive facial muscle conditioning"
+            ]
+        ),
+        Exercise(
+            name: "Neuromuscular Jaw Coordination Challenge",
+            bodyPart: .jaw,
+            description: "Ultimate jaw muscle control and strength",
+            difficulty: .advanced,
+            duration: 480,
+            steps: [
+                "Perform complex jaw resistance protocols",
+                "Include isometric and dynamic resistance variations",
+                "Maintain perfect muscle engagement",
+                "Integrate precise neuromuscular control techniques",
+                "4 sets of intricate jaw movement sequences",
+                "Progress with increased complexity"
+            ],
+            benefits: [
+                "Extreme jaw muscle control",
+                "Advanced neuromuscular coordination",
+                "Comprehensive jaw function enhancement"
+            ]
+        ),
+
+        // EYES
+        Exercise(
+            name: "Advanced Visual Tracking Complex",
+            bodyPart: .eyes,
+            description: "Ultimate eye muscle coordination and control",
+            difficulty: .advanced,
+            duration: 600,
+            steps: [
+                "Perform complex multi-object visual tracking",
+                "Include rapid movement and changing patterns",
+                "Maintain perfect focus under challenging conditions",
+                "Integrate cognitive challenge with visual tasks",
+                "3 sets of 15-minute continuous tracking",
+                "Progress with increased complexity"
+            ],
+            benefits: [
+                "Extreme eye muscle coordination",
+                "Advanced visual processing",
+                "Comprehensive neurological eye training"
+            ]
+        ),
+        Exercise(
+            name: "Neuro-Visual Integration Challenge",
+            bodyPart: .eyes,
+            description: "Complex visual-cognitive performance training",
+            difficulty: .advanced,
+            duration: 540,
+            steps: [
+                "Perform advanced visual-cognitive integration tasks",
+                "Include rapid decision-making with visual cues",
+                "Maintain perfect focus and cognitive processing",
+                "Integrate complex movement and visual challenges",
+                "4 sets of intricate visual-motor sequences",
+                "Progress with increased neurological complexity"
+            ],
+            benefits: [
+                "Extreme visual-cognitive coordination",
+                "Advanced neurological adaptation",
+                "Comprehensive sensory-motor integration"
+            ]
         )
     ]
 }
-    
+

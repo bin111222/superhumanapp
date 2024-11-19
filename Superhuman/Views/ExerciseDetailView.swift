@@ -86,7 +86,7 @@ struct ExerciseDetailView: View {
                 // Quick Stats
                 HStack(spacing: 20) {
                     StatBadge(icon: "clock", text: "\(Int(exercise.duration/60)) min")
-                    StatBadge(icon: "flame", text: "150 cal")
+
                     StatBadge(icon: "repeat", text: "3 sets")
                 }
             }
