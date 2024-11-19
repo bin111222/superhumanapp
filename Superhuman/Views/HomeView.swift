@@ -222,7 +222,10 @@ struct BodyPartCard: View {
     private var bodyPartIcon: some View {
         Image(systemName: iconName(for: bodyPart))
             .symbolRenderingMode(.palette)
-            .foregroundStyle(iconColor, iconSecondaryColor)
+            .foregroundStyle(iconColor, iconSecondaryColor, .gray.opacity(0.3))
+            .font(.system(size: 36, weight: .medium))
+            .frame(height: 40)
+            .symbolEffect(.bounce, options: .repeat(2), value: isCompleted)
     }
     
     private var iconColor: Color {
@@ -245,21 +248,35 @@ struct BodyPartCard: View {
     
     private func iconName(for bodyPart: BodyPart) -> String {
         switch bodyPart {
-        case .wrists: return "hand.raised.fill"
-        case .neck: return "person.bust.fill"
-        case .genitals: return "figure.walk.motion"
-        case .ankles: return "figure.walk.circle.fill"
-        case .lowerBack: return "figure.walk.arrival.fill"
-        case .jaw: return "mouth.fill"
-        case .hips: return "figure.dance"
-        case .shoulders: return "figure.arms.open"
-        case .eyes: return "eye.fill"
+        case .wrists:
+            return "hand.raised.circle.fill"
+        case .neck:
+            return "person.bust.circle.fill"
+        case .genitals:
+            return "figure.core.training.circle.fill"
+        case .ankles:
+            return "figure.walk.circle.fill"
+        case .lowerBack:
+            return "figure.archery.circle.fill"
+        case .jaw:
+            return "face.smiling.inverse"
+        case .hips:
+            return "figure.mixed.cardio.circle.fill"
+        case .shoulders:
+            return "figure.strengthtraining.traditional.circle.fill"
+        case .eyes:
+            return "eye.circle.fill"
         }
     }
 }
 
 struct QuoteCard: View {
-    let quote: Quote
+    @State private var quote: Quote
+    @State private var isAnimating = false
+    
+    init(quote: Quote) {
+        _quote = State(initialValue: quote)
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -272,6 +289,7 @@ struct QuoteCard: View {
                         endPoint: .bottomTrailing
                     )
                 )
+                .rotationEffect(.degrees(isAnimating ? 360 : 0))
             
             Text(quote.text)
                 .font(.system(.body, design: .serif, weight: .medium))
@@ -279,10 +297,12 @@ struct QuoteCard: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
                 .foregroundColor(.white)
+                .opacity(isAnimating ? 0 : 1)
             
             Text("— \(quote.author)")
                 .font(.system(.subheadline, design: .serif, weight: .light))
                 .foregroundColor(.gray)
+                .opacity(isAnimating ? 0 : 1)
         }
         .padding(.vertical, 20)
         .frame(maxWidth: .infinity)
@@ -305,6 +325,27 @@ struct QuoteCard: View {
                     lineWidth: 1
                 )
         )
+        .onTapGesture {
+            withAnimation(.spring()) {
+                isAnimating = true
+            }
+            
+            // Change quote after animation starts
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                let newQuote = Quote.quotes.randomElement() ?? quote
+                if newQuote.id == quote.id {
+                    // Make sure we don't show the same quote
+                    let differentQuote = Quote.quotes.first { $0.id != quote.id } ?? quote
+                    quote = differentQuote
+                } else {
+                    quote = newQuote
+                }
+                
+                withAnimation(.spring()) {
+                    isAnimating = false
+                }
+            }
+        }
     }
 }
 

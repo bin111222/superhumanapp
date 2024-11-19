@@ -166,13 +166,9 @@ struct UserDetailsView: View {
             HeaderView(title: "Body Metrics", subtitle: "Help us personalize your experience")
             
             VStack(spacing: 25) {
-                // Height Selector
                 HeightSelector(heightCM: $viewModel.heightText, sliderValue: $viewModel.heightValue)
-                
-                // Weight Selector
                 WeightSelector(weightKG: $viewModel.weightText, sliderValue: $viewModel.weightValue)
                 
-                // BMI Indicator
                 if let bmi = viewModel.calculateBMI() {
                     BMIIndicator(bmi: bmi)
                 }
@@ -186,7 +182,6 @@ struct UserDetailsView: View {
                     currentSection = 2
                 }
             }
-            .disabled(viewModel.heightText.isEmpty || viewModel.weightText.isEmpty)
         }
         .padding(.vertical, 50)
     }
