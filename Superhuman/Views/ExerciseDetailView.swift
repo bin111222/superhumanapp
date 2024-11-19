@@ -86,7 +86,6 @@ struct ExerciseDetailView: View {
                 // Quick Stats
                 HStack(spacing: 20) {
                     StatBadge(icon: "clock", text: "\(Int(exercise.duration/60)) min")
-                    StatBadge(icon: "flame", text: "150 cal")
                     StatBadge(icon: "repeat", text: "3 sets")
                 }
             }
@@ -144,19 +143,25 @@ struct InstructionsView: View {
     let steps: [String]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 20) {
             ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
                 HStack(alignment: .top, spacing: 16) {
                     Text("\(index + 1)")
                         .font(.headline)
                         .foregroundColor(.white)
-                        .frame(width: 24, height: 24)
+                        .frame(width: 28, height: 28)
                         .background(SuperhumanTheme.primaryColor)
                         .clipShape(Circle())
+                        .shadow(color: SuperhumanTheme.primaryColor.opacity(0.3), radius: 2, x: 0, y: 2)
                     
                     Text(step)
                         .font(.body)
+                        .lineSpacing(4)
                 }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color.gray.opacity(0.05))
+                .cornerRadius(12)
             }
         }
     }
@@ -166,13 +171,20 @@ struct BenefitsView: View {
     let benefits: [String]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             ForEach(benefits, id: \.self) { benefit in
-                HStack(spacing: 12) {
+                HStack(alignment: .top, spacing: 12) {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(SuperhumanTheme.primaryColor)
+                        .foregroundColor(Color.green)
+                        .font(.system(size: 20))
                     Text(benefit)
+                        .font(.body)
+                        .lineSpacing(4)
                 }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color.green.opacity(0.05))
+                .cornerRadius(12)
             }
         }
     }
@@ -203,11 +215,18 @@ struct TipsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             ForEach(tips, id: \.self) { tip in
-                HStack(spacing: 12) {
+                HStack(alignment: .top, spacing: 12) {
                     Image(systemName: "lightbulb.fill")
-                        .foregroundColor(.yellow)
+                        .foregroundColor(.orange)
+                        .font(.system(size: 20))
                     Text(tip)
+                        .font(.body)
+                        .lineSpacing(4)
                 }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color.orange.opacity(0.05))
+                .cornerRadius(12)
             }
         }
     }
