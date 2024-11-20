@@ -9,6 +9,7 @@ struct ExerciseDatabase {
             description: "Gentle stretch targeting the inner forearm muscles",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_1af23d624a3842fb83ad414de5f0e8f5/480p/mp4/file.mp4"),
             steps: [
                 "Extend your arm forward with palm facing up",
                 "Use other hand to gently pull fingers down and back",
@@ -27,6 +28,7 @@ struct ExerciseDatabase {
             description: "Circular movements to improve mobility",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_09c5b78127d44158a30fcdb4128ed979/480p/mp4/file.mp4"),
             steps: [
                 "Make a fist with both hands",
                 "Rotate wrists in clockwise circles for 30 seconds",
@@ -907,6 +909,7 @@ struct ExerciseDatabase {
             description: "Restorative yoga pose for back relaxation",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_09c5b78127d44158a30fcdb4128ed979/480p/mp4/file.mp4"),
             steps: [
                 "Kneel on the floor, sit back on heels",
                 "Lean forward, extending arms forward",

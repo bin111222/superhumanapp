@@ -2,9 +2,8 @@ import SwiftUI
 import AVKit
 
 struct MentalWellnessView: View {
-    @State private var selectedType: MentalWellnessType?
-    @State private var selectedActivity: MentalWellnessActivity?
     @StateObject private var viewModel = MentalWellnessViewModel()
+    @State private var selectedActivity: MentalWellnessActivity?
     
     var body: some View {
         NavigationView {
@@ -30,7 +29,7 @@ struct MentalWellnessView: View {
                     ], spacing: 16) {
                         ForEach(MentalWellnessType.allCases) { type in
                             WellnessTypeCard(type: type) {
-                                selectedType = type
+                                viewModel.selectedType = type
                                 selectedActivity = viewModel.getRandomActivity(for: type)
                             }
                         }
@@ -42,105 +41,124 @@ struct MentalWellnessView: View {
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedActivity) { activity in
                 NavigationView {
-                    MentalWellnessDetailView(activity: activity, selectedType: $selectedType)
-                        .navigationBarBackButtonHidden(true)
-                        .navigationBarItems(
-                            leading: Button {
-                                selectedActivity = nil
-                                selectedType = nil
+                    MentalWellnessDetailView(
+                        activity: activity,
+                        selectedType: $viewModel.selectedType,
+                        onChangeActivity: {
+                            if let type = viewModel.selectedType {
+                                if let newActivity = viewModel.getRandomActivity(for: type, excluding: activity) {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        selectedActivity = newActivity
+                                    }
+                                }
+                            }
+                        }
+                    )
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarItems(
+                        leading: Button {
+                            selectedActivity = nil
+                            viewModel.selectedType = nil
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                            .foregroundColor(SuperhumanTheme.primaryColor)
+                        },
+                        trailing: HStack(spacing: 16) {
+                            // Change Activity Button
+                            Button {
+                                if let type = viewModel.selectedType {
+                                    if let newActivity = viewModel.getRandomActivity(for: type, excluding: activity) {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            selectedActivity = newActivity
+                                        }
+                                    }
+                                }
                             } label: {
                                 HStack(spacing: 4) {
-                                    Image(systemName: "chevron.left")
-                                    Text("Back")
+                                    Image(systemName: "shuffle")
+                                    Text("Change")
                                 }
                                 .foregroundColor(SuperhumanTheme.primaryColor)
-                            },
-                            trailing: HStack(spacing: 16) {
-                                // Change Activity Button
-                                Button {
-                                    if let type = selectedType {
-                                        selectedActivity = viewModel.getRandomActivity(for: type)
-                                    }
-                                } label: {
-                                    HStack(spacing: 4) {
-                                        Image(systemName: "shuffle")
-                                        Text("Change")
-                                    }
-                                    .foregroundColor(SuperhumanTheme.primaryColor)
-                                }
-                                
-                                // Complete Button
-                                Button("Complete") {
-                                    handleActivityCompletion(activity)
-                                }
-                                .foregroundColor(SuperhumanTheme.primaryColor)
-                                .font(.headline)
                             }
-                        )
+                            
+                            // Complete Button
+                            Button("Complete") {
+                                viewModel.handleActivityCompletion(activity)
+                                selectedActivity = nil
+                                viewModel.selectedType = nil
+                            }
+                            .foregroundColor(SuperhumanTheme.primaryColor)
+                            .font(.headline)
+                        }
+                    )
                 }
                 .interactiveDismissDisabled()
             }
         }
-    }
-    
-    private func handleActivityCompletion(_ activity: MentalWellnessActivity) {
-        // Post notification for progress tracking
-        NotificationCenter.default.post(
-            name: NSNotification.Name("MentalWellnessActivityCompleted"),
-            object: activity
-        )
-        selectedActivity = nil
-        selectedType = nil
     }
 }
 
 struct MentalWellnessDetailView: View {
     let activity: MentalWellnessActivity
     @Binding var selectedType: MentalWellnessType?
+    let onChangeActivity: () -> Void
     @State private var selectedTab = 0
     @State private var showingTimer = false
     
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Header Section
+                // Header Section with Video/Image Support
                 VStack(spacing: 16) {
-                    // Video or Icon
-                    if let videoURL = activity.videoURL {
-                        VideoPlayer(player: AVPlayer(url: videoURL))
-                            .frame(height: 220)
-                    } else {
-                        Image(systemName: activity.type.icon)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 220)
-                            .foregroundColor(activity.type.color[0])
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: activity.type.color,
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ).opacity(0.2)
-                            )
+                    // Video or Image Container
+                    ZStack {
+                        if let videoURL = activity.videoURL {
+                            EnhancedVideoPlayer(url: videoURL)
+                                .frame(height: 220)
+                                .transition(.opacity)
+                        } else {
+                            Image(systemName: activity.type.icon)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 220)
+                                .foregroundColor(activity.type.color[0])
+                                .padding()
+                                .background(
+                                    LinearGradient(
+                                        colors: activity.type.color,
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ).opacity(0.2)
+                                )
+                                .transition(.opacity)
+                        }
                     }
+                    .animation(.easeInOut(duration: 0.3), value: activity.id)
                     
                     // Title and Description
                     VStack(spacing: 8) {
                         Text(activity.title)
                             .font(.title2.bold())
+                            .transition(.opacity)
                         
                         Text(activity.description)
                             .font(.body)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
+                            .transition(.opacity)
                     }
                     .padding(.horizontal)
+                    .animation(.easeInOut(duration: 0.3), value: activity.id)
                     
                     // Duration Badge
                     HStack(spacing: 20) {
                         StatBadge(icon: "clock", text: activity.formattedDuration)
                     }
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.3), value: activity.id)
                 }
                 
                 // Content Tabs
@@ -162,22 +180,24 @@ struct MentalWellnessDetailView: View {
                         .frame(height: 1)
                 }
                 
-                // Tab Content
+                // Tab Content with transition
                 VStack(alignment: .leading, spacing: 20) {
                     switch selectedTab {
                     case 0:
                         StepsView(steps: activity.steps)
+                            .transition(.opacity)
                     case 1:
                         BenefitsView(benefits: activity.benefits)
+                            .transition(.opacity)
                     case 2:
                         TipsView(tips: activity.tips)
+                            .transition(.opacity)
                     default:
                         EmptyView()
                     }
                 }
                 .padding()
-                .transition(.opacity)
-                .animation(.easeInOut, value: selectedTab)
+                .animation(.easeInOut(duration: 0.3), value: selectedTab)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -194,13 +214,6 @@ struct MentalWellnessDetailView: View {
         .sheet(isPresented: $showingTimer) {
             ExerciseTimerView(duration: activity.duration)
         }
-    }
-}
-
-class MentalWellnessViewModel: ObservableObject {
-    func getRandomActivity(for type: MentalWellnessType) -> MentalWellnessActivity? {
-        let activities = MentalWellnessDatabase.activitiesForType(type)
-        return activities.randomElement()
     }
 }
 

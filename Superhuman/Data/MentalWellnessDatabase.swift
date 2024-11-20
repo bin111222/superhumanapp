@@ -1100,6 +1100,276 @@ struct MentalWellnessDatabase {
                 "Focus on the process, not the outcome",
                 "Display the artwork as a reminder"
             ]
+        ),
+         // Relaxation Activities
+        // 1. Progressive Muscle Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Progressive Muscle Relaxation",
+            description: "Systematically tensing and relaxing muscle groups to reduce stress",
+            duration: 600,
+            steps: [
+                "Find a quiet place to sit or lie down",
+                "Start with your feet, tense the muscles for 5 seconds",
+                "Release the tension and relax for 10 seconds",
+                "Move to the calves, thighs, abdomen, arms, and face, repeating the tensing and relaxing",
+                "Focus on the sensation of relaxation after each release"
+            ],
+            benefits: [
+                "Reduces physical tension",
+                "Promotes deep relaxation",
+                "Enhances body awareness",
+                "Alleviates stress and anxiety"
+            ],
+            tips: [
+                "Perform in a comfortable setting",
+                "Breathe deeply and steadily throughout",
+                "Don't rush the process",
+                "Practice regularly for best results"
+            ]
+        ),
+        
+        // 2. Aromatherapy Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Aromatherapy Relaxation",
+            description: "Using essential oils to promote relaxation and calmness",
+            duration: 450,
+            steps: [
+                "Choose a calming essential oil (e.g., lavender, chamomile)",
+                "Add a few drops to a diffuser or a bowl of hot water",
+                "Inhale the aroma deeply",
+                "Close your eyes and focus on the scent",
+                "Allow the fragrance to relax your mind and body"
+            ],
+            benefits: [
+                "Promotes a calming environment",
+                "Reduces stress and anxiety",
+                "Enhances mood",
+                "Improves sleep quality"
+            ],
+            tips: [
+                "Ensure the room is well-ventilated",
+                "Use high-quality, pure essential oils",
+                "Combine with deep breathing for enhanced effect",
+                "Experiment with different scents to find your preference"
+            ]
+        ),
+        
+        // 3. Guided Relaxation Audio
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Guided Relaxation Audio",
+            description: "Listening to guided audio sessions to facilitate relaxation",
+            duration: 900,
+            steps: [
+                "Find a comfortable and quiet place",
+                "Choose a guided relaxation audio or app",
+                "Listen with headphones for better immersion",
+                "Follow the verbal instructions and visualize the scenes",
+                "Allow yourself to fully relax and let go of tension"
+            ],
+            benefits: [
+                "Facilitates deep relaxation",
+                "Reduces stress and anxiety",
+                "Improves focus and mindfulness",
+                "Enhances sleep quality"
+            ],
+            tips: [
+                "Select audio that resonates with you",
+                "Ensure minimal distractions during listening",
+                "Use as part of your daily relaxation routine",
+                "Combine with breathing exercises for maximum benefit"
+            ]
+        ),
+        
+        // 4. Warm Bath Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Warm Bath Relaxation",
+            description: "Taking a warm bath to soothe muscles and calm the mind",
+            duration: 1200,
+            steps: [
+                "Prepare a warm bath with comfortable water temperature",
+                "Add relaxing elements like Epsom salts or essential oils",
+                "Light candles or dim the lights for a serene atmosphere",
+                "Soak in the bath for 20 minutes, focusing on relaxation",
+                "Gently dry off and continue to relax after the bath"
+            ],
+            benefits: [
+                "Relieves muscle tension",
+                "Promotes mental relaxation",
+                "Improves sleep quality",
+                "Enhances skin health"
+            ],
+            tips: [
+                "Maintain a comfortable water temperature",
+                "Avoid harsh soaps that can irritate the skin",
+                "Use soft lighting or candles for ambiance",
+                "Incorporate calming music or silence as preferred"
+            ]
+        ),
+        
+        // 5. Nature Walk for Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Nature Walk for Relaxation",
+            description: "Walking in a natural setting to unwind and rejuvenate",
+            duration: 1800,
+            steps: [
+                "Choose a nearby park, forest, or natural area",
+                "Wear comfortable clothing and footwear",
+                "Walk at a leisurely pace, focusing on your surroundings",
+                "Engage all your senses by noticing sights, sounds, and smells",
+                "Take deep breaths and enjoy the tranquility of nature"
+            ],
+            benefits: [
+                "Reduces stress and anxiety",
+                "Enhances mood and mental clarity",
+                "Improves physical health through gentle exercise",
+                "Boosts creativity and cognitive function"
+            ],
+            tips: [
+                "Choose a safe and accessible location",
+                "Leave behind digital devices to stay present",
+                "Bring water and wear appropriate attire",
+                "Practice mindfulness during the walk"
+            ]
+        ),
+        
+        // 6. Listening to Calming Music
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Listening to Calming Music",
+            description: "Engaging with soothing music to promote relaxation",
+            duration: 600,
+            steps: [
+                "Select calming music genres (e.g., classical, ambient, nature sounds)",
+                "Find a comfortable and quiet place to sit or lie down",
+                "Use headphones for better sound quality",
+                "Close your eyes and focus on the music",
+                "Allow the melodies to relax your mind and body"
+            ],
+            benefits: [
+                "Reduces stress and anxiety",
+                "Enhances mood and emotional wellbeing",
+                "Promotes mental relaxation",
+                "Improves focus and concentration"
+            ],
+            tips: [
+                "Create a relaxing playlist",
+                "Adjust the volume to a comfortable level",
+                "Use music as part of your daily relaxation routine",
+                "Experiment with different genres to find what suits you best"
+            ]
+        ),
+        
+        // 7. Reading for Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Reading for Relaxation",
+            description: "Engaging with a good book to unwind and relax",
+            duration: 1200,
+            steps: [
+                "Choose a book that interests you and is not too demanding",
+                "Find a comfortable and quiet reading spot",
+                "Set aside uninterrupted time for reading",
+                "Immerse yourself in the story or content",
+                "Reflect on the reading experience after finishing"
+            ],
+            benefits: [
+                "Reduces stress and anxiety",
+                "Enhances cognitive function",
+                "Improves concentration and focus",
+                "Provides an escape from daily pressures"
+            ],
+            tips: [
+                "Avoid reading on electronic devices to prevent eye strain",
+                "Create a cozy reading environment with good lighting",
+                "Choose genres that you find relaxing",
+                "Set a regular reading schedule"
+            ]
+        ),
+        
+        // 8. Visualization Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Visualization Relaxation",
+            description: "Using mental imagery to create a sense of calm and relaxation",
+            duration: 700,
+            steps: [
+                "Sit or lie down in a comfortable position",
+                "Close your eyes and take deep breaths",
+                "Imagine a peaceful and serene place (e.g., beach, forest)",
+                "Engage all your senses by visualizing details",
+                "Stay in the imagined environment, feeling relaxed and at peace"
+            ],
+            benefits: [
+                "Promotes deep mental relaxation",
+                "Reduces stress and anxiety",
+                "Enhances creativity and imagination",
+                "Improves emotional wellbeing"
+            ],
+            tips: [
+                "Choose a visualization that resonates with you",
+                "Incorporate all senses for a vivid experience",
+                "Practice regularly to strengthen the technique",
+                "Combine with deep breathing for enhanced effect"
+            ]
+        ),
+        
+        // 9. Tai Chi for Relaxation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Tai Chi for Relaxation",
+            description: "Practicing gentle martial arts movements to promote relaxation and balance",
+            duration: 1500,
+            steps: [
+                "Find a quiet space with enough room to move",
+                "Wear comfortable, loose-fitting clothing",
+                "Begin with deep breathing to center yourself",
+                "Follow a Tai Chi routine, focusing on slow, deliberate movements",
+                "Maintain mindfulness and flow throughout the practice"
+            ],
+            benefits: [
+                "Enhances physical flexibility and balance",
+                "Reduces stress and anxiety",
+                "Promotes mental clarity and focus",
+                "Improves overall physical health"
+            ],
+            tips: [
+                "Learn from a qualified instructor or use guided videos",
+                "Start with simple movements and gradually progress",
+                "Maintain a steady breathing rhythm",
+                "Practice regularly for optimal benefits"
+            ]
+        ),
+        
+        // 10. Scented Candle Meditation
+        MentalWellnessActivity(
+            type: .relaxation,
+            title: "Scented Candle Meditation",
+            description: "Using the aroma and flame of a candle to facilitate meditation and relaxation",
+            duration: 500,
+            steps: [
+                "Choose a scented candle with calming fragrance",
+                "Place the candle in a safe, stable holder",
+                "Sit comfortably in a dimly lit room",
+                "Light the candle and focus on the flame",
+                "Breathe deeply, inhaling the scent and watching the flame flicker"
+            ],
+            benefits: [
+                "Promotes a calming environment",
+                "Enhances focus and mindfulness",
+                "Reduces stress and anxiety",
+                "Improves mental clarity"
+            ],
+            tips: [
+                "Ensure the candle is placed away from flammable objects",
+                "Choose a fragrance that you find soothing",
+                "Use unscented candles if you are sensitive to smells",
+                "Combine with deep breathing for enhanced relaxation"
+            ]
         )
     ]
     

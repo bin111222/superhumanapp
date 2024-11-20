@@ -43,7 +43,7 @@ struct TabBarView: View {
                     Image("LaunchLogo")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 40)
+                        .frame(height: 200)
                 }
             }
         }

@@ -95,7 +95,7 @@ struct ExerciseDetailView: View {
         VStack(spacing: 16) {
             // Exercise Image or Video
             if let videoURL = currentExercise.videoURL {
-                VideoPlayer(player: AVPlayer(url: videoURL))
+                EnhancedVideoPlayer(url: videoURL)
                     .frame(height: 220)
             } else {
                 Image(systemName: "figure.mixed.cardio")
