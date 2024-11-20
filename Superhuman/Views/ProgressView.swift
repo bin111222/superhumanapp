@@ -82,7 +82,7 @@ struct ProgressView: View {
     
     private var weekCalendarView: some View {
         HStack(spacing: 8) {
-            ForEach(Array(zip(weekDates.indices, weekDates)), id: \.0) { index, date in
+            ForEach(weekDates, id: \.self) { date in
                 let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
                 let hasExercises = viewModel.hasExercises(on: date)
                 

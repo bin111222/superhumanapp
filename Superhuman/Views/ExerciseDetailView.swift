@@ -1,6 +1,39 @@
 import SwiftUI
 import AVKit
 
+private let motivationalMessages = [
+    "Push through! You're getting stronger! 💪",
+    "Every second counts towards your goal! 🎯",
+    "You've got this - stay focused! 🔥",
+    "Feel your body getting stronger! ⚡️",
+    "Breathe and stay present! 🧘‍♂️",
+    "You're building your superhuman self! 🦸‍♂️",
+    "Almost there - keep pushing! 🚀",
+    "Your dedication is inspiring! ✨",
+    "Transform your body, transform your life! 🌟",
+    "Feel the power within you! 💫",
+    "You're doing amazing! Keep going! 🌈",
+    "Each second brings transformation! 🔄",
+    "Stay strong, stay determined! 💎",
+    "You're becoming unstoppable! 🏃‍♂️",
+    "Feel the energy flow through you! ⚡️",
+    "Your potential is limitless! 🌠",
+    "Making the impossible possible! 🎯",
+    "You're writing your success story! 📖",
+    "This is your moment to shine! ⭐️",
+    "Unleash your inner strength! 🔓",
+    "Today's effort is tomorrow's strength! 🌅",
+    "Every rep brings you closer to your goals! 📈",
+    "You're stronger than you think! 💪",
+    "Excellence is a habit - build it now! 🌟",
+    "Feel the power of transformation! 🔄",
+    "Your journey to greatness continues! 🚀",
+    "Break limits, set new records! 📊",
+    "Mind over matter - you've got this! 🧠",
+    "Your dedication is your superpower! 🦸‍♀️",
+    "Progress is progress, no matter how small! 💫"
+]
+
 struct ExerciseDetailView: View {
     let exercise: Exercise
     @State private var selectedTab = 0
@@ -233,6 +266,9 @@ struct ExerciseTimerView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var timeRemaining: TimeInterval
     @State private var isRunning = false
+    @State private var progress: Double = 1.0
+    @State private var glowOpacity = 0.0
+    @State private var currentMessage = motivationalMessages[0]
     
     init(duration: TimeInterval) {
         self.duration = duration
@@ -240,52 +276,184 @@ struct ExerciseTimerView: View {
     }
     
     var body: some View {
-        VStack(spacing: 30) {
-            Text(timeString(from: timeRemaining))
-                .font(.system(size: 60, weight: .bold, design: .rounded))
+        ZStack {
+            // Background
+            Color.black.opacity(0.9)
+                .ignoresSafeArea()
             
-            HStack(spacing: 20) {
-                Button(action: {
-                    isRunning.toggle()
-                }) {
-                    Image(systemName: isRunning ? "pause.circle.fill" : "play.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(SuperhumanTheme.primaryColor)
+            VStack(spacing: 40) {
+                // Timer Display
+                ZStack {
+                    // Background Track
+                    Capsule()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(height: 60)
+                    
+                    // Progress Bar
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            // Main Progress Bar
+                            Capsule()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [SuperhumanTheme.primaryColor, SuperhumanTheme.primaryColor.opacity(0.7)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .frame(width: geometry.size.width * progress)
+                            
+                            // Electric Glow Effect
+                            if progress > 0 {
+                                Capsule()
+                                    .fill(SuperhumanTheme.primaryColor)
+                                    .frame(width: 4, height: 60)
+                                    .offset(x: geometry.size.width * progress - 2)
+                                    .opacity(glowOpacity)
+                                    .blur(radius: 2)
+                            }
+                        }
+                    }
+                    .frame(height: 60)
+                    .clipShape(Capsule())
+                    
+                    // Time Display
+                    HStack(spacing: 4) {
+                        Text(timeString(from: timeRemaining))
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .contentTransition(.numericText())
+                        
+                        Text("sec")
+                            .font(.system(size: 20, weight: .medium, design: .rounded))
+                            .foregroundColor(.white.opacity(0.7))
+                            .offset(y: 2)
+                    }
+                    .padding(.horizontal, 20)
+                    .background(.black.opacity(0.3))
+                    .clipShape(Capsule())
+                    
+                    // Pause/Play Button
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                isRunning.toggle()
+                            }
+                        }) {
+                            Image(systemName: isRunning ? "pause.fill" : "play.fill")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color.black.opacity(0.3))
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(SuperhumanTheme.primaryColor.opacity(0.5), lineWidth: 2)
+                                )
+                        }
+                        .padding(.trailing, 8)
+                    }
                 }
+                .frame(height: 60)
+                .padding(.horizontal)
                 
-                Button(action: {
-                    timeRemaining = duration
-                    isRunning = false
-                }) {
-                    Image(systemName: "arrow.clockwise.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(.gray)
+                // Add Motivational Message
+                Text(currentMessage)
+                    .font(.system(.headline, design: .rounded))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                    .transition(.opacity)
+                    .animation(.easeInOut, value: currentMessage)
+                
+                // Control Buttons
+                HStack(spacing: 30) {
+                    // Reset Button
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            resetTimer()
+                        }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.title)
+                            .foregroundColor(.white.opacity(0.7))
+                            .rotationEffect(.degrees(isRunning ? 360 : 0))
+                            .animation(.spring(response: 0.5, dampingFraction: 0.6), value: isRunning)
+                    }
+                    
+                    // Close Button
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("Done")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Color.gray.opacity(0.3))
+                            .cornerRadius(25)
+                    }
                 }
             }
         }
-        .padding()
         .onAppear {
             startTimer()
+            startMotivationalMessageTimer()
         }
     }
     
     private func startTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
             guard isRunning else { return }
             
             if timeRemaining > 0 {
-                timeRemaining -= 1
+                timeRemaining -= 0.1
+                progress = timeRemaining / duration
+                
+                // Pulse glow effect
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    glowOpacity = 0.8
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        glowOpacity = 0
+                    }
+                }
             } else {
                 timer.invalidate()
-                // Add completion feedback here
+                hapticFeedback()
+                // Final animation
+                withAnimation(.spring()) {
+                    glowOpacity = 1
+                }
             }
         }
     }
     
+    private func resetTimer() {
+        timeRemaining = duration
+        progress = 1.0
+        isRunning = false
+        glowOpacity = 0
+    }
+    
+    private func hapticFeedback() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+    
     private func timeString(from timeInterval: TimeInterval) -> String {
-        let minutes = Int(timeInterval) / 60
-        let seconds = Int(timeInterval) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+        let seconds = Int(ceil(timeInterval))
+        return "\(seconds)"
+    }
+    
+    private func startMotivationalMessageTimer() {
+        Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { _ in
+            withAnimation {
+                currentMessage = motivationalMessages.randomElement() ?? currentMessage
+            }
+        }
     }
 }
 
@@ -294,3 +462,4 @@ struct ExerciseTimerView: View {
         ExerciseDetailView(exercise: ExerciseDatabase.exercises[0])
     }
 } 
+

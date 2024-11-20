@@ -11,6 +11,13 @@ struct Exercise: Identifiable, Codable {
     let steps: [String]
     let benefits: [String]
     var completionDate: Date?
+    var completionStreak: Int = 0
+    var totalCompletions: Int = 0
+    
+    var isCompletedToday: Bool {
+        guard let date = completionDate else { return false }
+        return Calendar.current.isDateInToday(date)
+    }
     
     enum Difficulty: String, Codable, CaseIterable {
         case beginner
@@ -42,7 +49,7 @@ struct Exercise: Identifiable, Codable {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case id, name, bodyPart, description, difficulty, duration, videoURL, steps, benefits, completionDate
+        case id, name, bodyPart, description, difficulty, duration, videoURL, steps, benefits, completionDate, completionStreak, totalCompletions
     }
     
     init(id: UUID = UUID(), name: String, bodyPart: BodyPart, description: String, 

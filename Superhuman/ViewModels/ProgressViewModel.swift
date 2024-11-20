@@ -1,11 +1,36 @@
 import Foundation
 import Combine
+import UIKit
 
 class ProgressViewModel: ObservableObject {
+    // Stats Models
+    struct WeeklyStats {
+        var exercisesCompleted: Int = 0
+        var totalMinutes: Int = 0
+        var bodyPartsWorked: Set<BodyPart> = []
+        var dailyProgress: [Date: Double] = [:]
+    }
+    
+    struct MonthlyStats {
+        var bestStreak: Int = 0
+        var totalExercises: Int = 0
+        var mostWorkedBodyPart: BodyPart?
+        var progressTrend: [Date: Double] = [:]
+    }
+    
+    struct StreakInfo {
+        var currentStreak: Int = 0
+        var bestStreak: Int = 0
+        var lastCompletionDate: Date?
+    }
+    
     @Published var completedExercises: [Exercise] = []
     @Published var timeUntilReset: String = ""
     @Published var todayProgress: Double = 0.0
     @Published var weeklyProgress: Double = 0.0
+    @Published var weeklyStats: WeeklyStats = WeeklyStats()
+    @Published var monthlyStats: MonthlyStats = MonthlyStats()
+    @Published var streakInfo: StreakInfo = StreakInfo()
     private var timer: Timer?
     
     // Constants for goals
@@ -104,6 +129,24 @@ class ProgressViewModel: ObservableObject {
     
     deinit {
         timer?.invalidate()
+    }
+    
+    func updateStats() {
+        calculateWeeklyStats()
+        calculateMonthlyStats()
+        updateStreakInfo()
+    }
+    
+    private func calculateWeeklyStats() {
+        // Implementation for weekly statistics
+    }
+    
+    private func calculateMonthlyStats() {
+        // Implementation for monthly statistics
+    }
+    
+    private func updateStreakInfo() {
+        // Implementation for streak tracking
     }
 }
 
