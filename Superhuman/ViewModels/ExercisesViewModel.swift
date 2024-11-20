@@ -2,60 +2,38 @@ import Foundation
 import Combine
 
 class ExercisesViewModel: ObservableObject {
-    @Published var exercises: [Exercise] = []
-    @Published var selectedDifficulty: Exercise.Difficulty?
+    @Published var exercises: [Exercise] = ExerciseDatabase.exercises
     @Published var selectedBodyPart: BodyPart?
-    @Published var searchText: String = ""
+    @Published var selectedDifficulty: Exercise.Difficulty?
+    @Published var searchText = ""
     
     var filteredExercises: [Exercise] {
-        exercises.filter { exercise in
-            var matches = true
-            
-            if let difficulty = selectedDifficulty {
-                matches = matches && exercise.difficulty == difficulty
-            }
-            
-            if let bodyPart = selectedBodyPart {
-                matches = matches && exercise.bodyPart == bodyPart
-            }
-            
-            if !searchText.isEmpty {
-                matches = matches && (
-                    exercise.name.localizedCaseInsensitiveContains(searchText) ||
-                    exercise.description.localizedCaseInsensitiveContains(searchText)
-                )
-            }
-            
-            return matches
+        var filtered = exercises
+        
+        if let bodyPart = selectedBodyPart {
+            filtered = filtered.filter { $0.bodyPart == bodyPart }
         }
+        
+        if let difficulty = selectedDifficulty {
+            filtered = filtered.filter { $0.difficulty == difficulty }
+        }
+        
+        if !searchText.isEmpty {
+            filtered = filtered.filter { exercise in
+                exercise.name.localizedCaseInsensitiveContains(searchText) ||
+                exercise.description.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+        
+        return filtered
     }
     
-    init() {
-        loadExercises()
+    func getRandomExercise(for bodyPart: BodyPart) -> Exercise? {
+        let exercisesForBodyPart = exercises.filter { $0.bodyPart == bodyPart }
+        return exercisesForBodyPart.randomElement()
     }
     
-    private func loadExercises() {
-        // TODO: Replace with actual API call or database fetch
-        exercises = [
-            Exercise(
-                name: "Wrist Flexor Stretch",
-                bodyPart: .wrists,
-                description: "A gentle stretch for your wrist flexor muscles",
-                difficulty: .beginner,
-                duration: 180,
-                steps: [
-                    "Extend your arm forward with palm facing up",
-                    "Use other hand to gently pull fingers down and back",
-                    "Hold for 15-30 seconds",
-                    "Repeat 3 times"
-                ],
-                benefits: [
-                    "Improves wrist flexibility",
-                    "Reduces risk of carpal tunnel",
-                    "Relieves wrist tension"
-                ]
-            ),
-            // Add more sample exercises here
-        ]
+    func exercisesForBodyPart(_ bodyPart: BodyPart) -> [Exercise] {
+        exercises.filter { $0.bodyPart == bodyPart }
     }
 } 

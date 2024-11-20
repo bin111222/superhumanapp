@@ -9,88 +9,33 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var appSettings: AppSettings
-    @State private var selectedTab = 0
-    @State private var showProfile = false
     @State private var hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+    @State private var showProfile = false
     
     var body: some View {
         Group {
             if !hasCompletedOnboarding {
                 OnboardingView()
             } else {
-                mainContent
+                TabBarView()
+                    .overlay(
+                        Button(action: {
+                            showProfile.toggle()
+                        }) {
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 22))
+                                .foregroundColor(SuperhumanTheme.primaryColor)
+                        }
+                        .padding()
+                        .offset(x: -16, y: -UIScreen.main.bounds.height/2 + 60)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                    )
+                    .sheet(isPresented: $showProfile) {
+                        NavigationStack {
+                            ProfileView()
+                        }
+                    }
             }
-        }
-    }
-    
-    private var mainContent: some View {
-        NavigationStack {
-            TabView(selection: $selectedTab) {
-                HomeView()
-                    .tabItem {
-                        Label("Home", systemImage: "house.fill")
-                    }
-                    .tag(0)
-                
-                ExercisesView()
-                    .tabItem {
-                        Label("Exercises", systemImage: "figure.run")
-                    }
-                    .tag(1)
-                
-                ProgressView()
-                    .tabItem {
-                        Label("Progress", systemImage: "chart.bar.fill")
-                    }
-                    .tag(2)
-            }
-            .tint(SuperhumanTheme.primaryColor)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showProfile = true
-                    } label: {
-                        Image(systemName: "person.circle")
-                            .font(.system(size: 22))
-                            .foregroundColor(SuperhumanTheme.primaryColor)
-                    }
-                }
-                
-                ToolbarItem(placement: .principal) {
-                    HStack(spacing: 8) {
-                        Image("LaunchLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 50)
-                            .padding(.top, 18)
-                    }
-                }
-            }
-        }
-        .sheet(isPresented: $showProfile) {
-            NavigationStack {
-                ProfileView()
-            }
-        }
-        .onAppear {
-            // Set default tab bar appearance
-            let appearance = UITabBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            UITabBar.appearance().scrollEdgeAppearance = appearance
-            
-            // Set default navigation bar appearance
-            let navigationAppearance = UINavigationBarAppearance()
-            navigationAppearance.configureWithOpaqueBackground()
-            UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
-            
-            // Adjust navigation bar height
-            let navBarHeight: CGFloat = 44 // Standard navigation bar height
-            UINavigationBar.appearance().frame = CGRect(
-                x: 0,
-                y: 0,
-                width: UIScreen.main.bounds.width,
-                height: navBarHeight
-            )
         }
     }
 }

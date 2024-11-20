@@ -39,6 +39,14 @@ struct ExerciseDetailView: View {
     @State private var selectedTab = 0
     @State private var showingTimer = false
     @State private var isBookmarked = false
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var viewModel = ExercisesViewModel()
+    @State private var currentExercise: Exercise
+    
+    init(exercise: Exercise) {
+        self.exercise = exercise
+        _currentExercise = State(initialValue: exercise)
+    }
     
     var body: some View {
         ScrollView {
@@ -53,15 +61,20 @@ struct ExerciseDetailView: View {
                 tabContent
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 16) {
+                    // Change Exercise Button
                     Button {
-                        isBookmarked.toggle()
+                        changeExercise()
                     } label: {
-                        Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                            .foregroundColor(SuperhumanTheme.primaryColor)
+                        HStack(spacing: 4) {
+                            Image(systemName: "shuffle")
+                            Text("Change")
+                        }
+                        .foregroundColor(SuperhumanTheme.primaryColor)
                     }
                     
                     Button {
@@ -74,14 +87,14 @@ struct ExerciseDetailView: View {
             }
         }
         .sheet(isPresented: $showingTimer) {
-            ExerciseTimerView(duration: exercise.duration)
+            ExerciseTimerView(duration: currentExercise.duration)
         }
     }
     
     private var exerciseHeader: some View {
         VStack(spacing: 16) {
             // Exercise Image or Video
-            if let videoURL = exercise.videoURL {
+            if let videoURL = currentExercise.videoURL {
                 VideoPlayer(player: AVPlayer(url: videoURL))
                     .frame(height: 220)
             } else {
@@ -95,62 +108,107 @@ struct ExerciseDetailView: View {
             }
             
             VStack(alignment: .leading, spacing: 12) {
-                // Title and Difficulty
-                HStack {
-                    Text(exercise.name)
+                // Title and Body Part
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(currentExercise.name)
                         .font(.title2.bold())
                     
-                    Spacer()
-                    
-                    Text(exercise.difficulty.rawValue)
-                        .font(.caption)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(exercise.difficulty.color.opacity(0.2))
-                        .foregroundColor(exercise.difficulty.color)
-                        .cornerRadius(12)
+                    Text(currentExercise.bodyPart.rawValue)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
                 
                 // Description
-                Text(exercise.description)
+                Text(currentExercise.description)
                     .font(.body)
                     .foregroundColor(.gray)
                 
-                // Quick Stats
+                // Quick Stats with difficulty badge
                 HStack(spacing: 20) {
-                    StatBadge(icon: "clock", text: "\(Int(exercise.duration/60)) min")
-
+                    StatBadge(icon: "clock", text: "\(Int(currentExercise.duration/60)) min")
                     StatBadge(icon: "repeat", text: "3 sets")
+                    
+                    // Difficulty Badge
+                    Text(currentExercise.difficulty.rawValue)
+                        .font(.caption.bold())
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(currentExercise.difficulty.color.opacity(0.2))
+                        .foregroundColor(currentExercise.difficulty.color)
+                        .cornerRadius(12)
                 }
+                .padding(.top, 4)
             }
             .padding(.horizontal)
         }
     }
     
     private var tabSection: some View {
-        Picker("Content", selection: $selectedTab) {
-            Text("Instructions").tag(0)
-            Text("Benefits").tag(1)
-            Text("Tips").tag(2)
+        VStack(spacing: 0) {
+            HStack {
+                ForEach(["Instructions", "Benefits", "Tips"], id: \.self) { tab in
+                    let index = ["Instructions", "Benefits", "Tips"].firstIndex(of: tab) ?? 0
+                    TabButton(text: tab, isSelected: selectedTab == index) {
+                        withAnimation {
+                            selectedTab = index
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal)
+            
+            Rectangle()
+                .fill(Color.gray.opacity(0.2))
+                .frame(height: 1)
         }
-        .pickerStyle(.segmented)
-        .padding(.horizontal)
     }
     
     private var tabContent: some View {
         VStack(alignment: .leading, spacing: 20) {
             switch selectedTab {
             case 0:
-                InstructionsView(steps: exercise.steps)
+                InstructionsView(steps: currentExercise.steps)
             case 1:
-                BenefitsView(benefits: exercise.benefits)
+                BenefitsView(benefits: currentExercise.benefits)
             case 2:
-                TipsView(bodyPart: exercise.bodyPart)
+                TipsView(bodyPart: currentExercise.bodyPart)
             default:
                 EmptyView()
             }
         }
         .padding()
+        .transition(.opacity)
+        .animation(.easeInOut, value: selectedTab)
+    }
+    
+    private func changeExercise() {
+        if let newExercise = viewModel.getRandomExercise(for: currentExercise.bodyPart) {
+            withAnimation {
+                currentExercise = newExercise
+            }
+        }
+    }
+}
+
+struct TabButton: View {
+    let text: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Text(text)
+                    .font(.subheadline)
+                    .fontWeight(isSelected ? .bold : .regular)
+                    .foregroundColor(isSelected ? .white : .gray)
+                
+                Rectangle()
+                    .fill(isSelected ? SuperhumanTheme.primaryColor : Color.clear)
+                    .frame(height: 2)
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -386,7 +444,7 @@ struct ExerciseTimerView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Text("Done")
+                        Text("Complete")
                             .font(.headline)
                             .foregroundColor(.white)
                             .padding(.horizontal, 24)
