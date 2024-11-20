@@ -6,31 +6,48 @@ struct MentalWellnessView: View {
     @State private var selectedActivity: MentalWellnessActivity?
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                // Categories Grid
-                LazyVGrid(columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ], spacing: 16) {
-                    ForEach(MentalWellnessType.allCases) { type in
-                        WellnessTypeCard(type: type) {
-                            selectedType = type
+        NavigationView {
+            VStack(spacing: 0) {
+                // Title and Description
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Mental Wellbeing")
+                        .font(.title.bold())
+                    
+                    Text("Explore practices for mental wellness and inner peace")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.top, 16)
+                
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Categories Grid
+                        LazyVGrid(columns: [
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                        ], spacing: 16) {
+                            ForEach(MentalWellnessType.allCases) { type in
+                                WellnessTypeCard(type: type) {
+                                    selectedType = type
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 16)
+                        
+                        // Activities List
+                        if let type = selectedType {
+                            activitiesList(for: type)
                         }
                     }
                 }
-                .padding(.horizontal)
-                
-                // Activities List
-                if let type = selectedType {
-                    activitiesList(for: type)
-                }
             }
-            .padding(.top)
-        }
-        .navigationTitle("Mental Wellness")
-        .sheet(item: $selectedActivity) { activity in
-            MentalWellnessDetailView(activity: activity)
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $selectedActivity) { activity in
+                MentalWellnessDetailView(activity: activity)
+            }
         }
     }
     
@@ -152,25 +169,31 @@ struct WellnessTypeCard: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 12) {
-                Image(systemName: type.icon)
-                    .font(.system(size: 32))
-                    .foregroundColor(.white)
-                
-                Text(type.rawValue)
-                    .font(.headline)
-                    .foregroundColor(.white)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(
-                LinearGradient(
-                    colors: type.color,
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
+            GeometryReader { geometry in
+                VStack(spacing: 12) {
+                    Spacer()
+                    
+                    Image(systemName: type.icon)
+                        .font(.system(size: 32))
+                        .foregroundColor(.white)
+                    
+                    Text(type.rawValue)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                }
+                .frame(width: geometry.size.width, height: geometry.size.width)
+                .background(
+                    LinearGradient(
+                        colors: type.color,
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
                 )
-            )
-            .cornerRadius(20)
+                .cornerRadius(20)
+            }
+            .aspectRatio(1, contentMode: .fit)
         }
     }
 }

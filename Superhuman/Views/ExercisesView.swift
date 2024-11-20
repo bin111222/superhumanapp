@@ -6,6 +6,8 @@ struct ExercisesView: View {
     @State private var searchText = ""
     @State private var selectedBodyPart: BodyPart?
     @State private var selectedDifficulty: Exercise.Difficulty?
+    @State private var showingExerciseDetail = false
+    @State private var selectedExercise: Exercise?
     
     private var filteredExercises: [Exercise] {
         var exercises = ExerciseDatabase.exercises
@@ -52,7 +54,42 @@ struct ExercisesView: View {
                     selectedDifficulty: $selectedDifficulty
                 )
             }
+            .fullScreenCover(item: $selectedExercise) { exercise in
+                NavigationView {
+                    ExerciseDetailView(exercise: exercise)
+                        .navigationBarBackButtonHidden(true)
+                        .navigationBarItems(
+                            leading: Button {
+                                selectedExercise = nil
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "chevron.left")
+                                    Text("Back")
+                                }
+                                .foregroundColor(SuperhumanTheme.primaryColor)
+                            },
+                            trailing: Button("Complete") {
+                                handleExerciseCompletion(exercise)
+                            }
+                            .foregroundColor(SuperhumanTheme.primaryColor)
+                            .font(.headline)
+                        )
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+                .interactiveDismissDisabled()
+            }
         }
+    }
+    
+    private func handleExerciseCompletion(_ exercise: Exercise) {
+        // Post notification for progress tracking
+        NotificationCenter.default.post(
+            name: NSNotification.Name("ExerciseCompleted"),
+            object: exercise
+        )
+        
+        // Dismiss the detail view
+        selectedExercise = nil
     }
     
     private var searchFilterBar: some View {
@@ -100,9 +137,11 @@ struct ExercisesView: View {
                 if let exercises = exercisesGroupedByBodyPart[bodyPart], !exercises.isEmpty {
                     Section(header: Text(bodyPart.rawValue)) {
                         ForEach(exercises) { exercise in
-                            NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
-                                ExerciseRow(exercise: exercise)
-                            }
+                            ExerciseRow(exercise: exercise)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    selectedExercise = exercise
+                                }
                         }
                     }
                 }

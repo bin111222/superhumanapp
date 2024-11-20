@@ -325,8 +325,9 @@ struct ExerciseTimerView: View {
     @State private var timeRemaining: TimeInterval
     @State private var isRunning = false
     @State private var progress: Double = 1.0
-    @State private var glowOpacity = 0.0
+    @State private var waveOffset = 0.0
     @State private var currentMessage = motivationalMessages[0]
+    @State private var isWaveAnimating = false
     
     init(duration: TimeInterval) {
         self.duration = duration
@@ -336,94 +337,82 @@ struct ExerciseTimerView: View {
     var body: some View {
         ZStack {
             // Background
-            Color.black.opacity(0.9)
+            Color.black
                 .ignoresSafeArea()
             
             VStack(spacing: 40) {
-                // Timer Display
-                ZStack {
-                    // Background Track
-                    Capsule()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 60)
-                    
-                    // Progress Bar
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            // Main Progress Bar
-                            Capsule()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [SuperhumanTheme.primaryColor, SuperhumanTheme.primaryColor.opacity(0.7)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .frame(width: geometry.size.width * progress)
-                            
-                            // Electric Glow Effect
-                            if progress > 0 {
-                                Capsule()
-                                    .fill(SuperhumanTheme.primaryColor)
-                                    .frame(width: 4, height: 60)
-                                    .offset(x: geometry.size.width * progress - 2)
-                                    .opacity(glowOpacity)
-                                    .blur(radius: 2)
-                            }
-                        }
-                    }
-                    .frame(height: 60)
-                    .clipShape(Capsule())
-                    
-                    // Time Display
-                    HStack(spacing: 4) {
-                        Text(timeString(from: timeRemaining))
-                            .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .contentTransition(.numericText())
-                        
-                        Text("sec")
-                            .font(.system(size: 20, weight: .medium, design: .rounded))
-                            .foregroundColor(.white.opacity(0.7))
-                            .offset(y: 2)
-                    }
-                    .padding(.horizontal, 20)
-                    .background(.black.opacity(0.3))
-                    .clipShape(Capsule())
-                    
-                    // Pause/Play Button
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            withAnimation(.spring()) {
-                                isRunning.toggle()
-                            }
-                        }) {
-                            Image(systemName: isRunning ? "pause.fill" : "play.fill")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .frame(width: 44, height: 44)
-                                .background(Color.black.opacity(0.3))
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle()
-                                        .stroke(SuperhumanTheme.primaryColor.opacity(0.5), lineWidth: 2)
-                                )
-                        }
-                        .padding(.trailing, 8)
-                    }
-                }
-                .frame(height: 60)
-                .padding(.horizontal)
-                
-                // Add Motivational Message
+                // Motivational Message - Moved to top
                 Text(currentMessage)
                     .font(.system(.headline, design: .rounded))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
+                    .padding(.top, 40) // Added top padding
                     .transition(.opacity)
                     .animation(.easeInOut, value: currentMessage)
+                
+                Spacer()
+                
+                // Timer Display with Wave Animation
+                ZStack {
+                    // Container
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(width: 120, height: 400) // Increased width and height
+                    
+                    // Wave Animation
+                    GeometryReader { geometry in
+                        ZStack(alignment: .bottom) {
+                            // Wave Shape
+                            WaveShape(offset: waveOffset, percent: progress, amplitude: 2, frequency: 2)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            SuperhumanTheme.primaryColor,
+                                            SuperhumanTheme.primaryColor.opacity(0.7)
+                                        ],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .frame(height: 400) // Match container height
+                            
+                            // Time Display
+                            Text(timeString(from: timeRemaining))
+                                .font(.system(size: 40, weight: .bold, design: .rounded)) // Increased font size
+                                .foregroundColor(.white)
+                                .contentTransition(.numericText())
+                                .frame(width: 120)
+                                .background(.black.opacity(0.3))
+                                .offset(y: -180) // Adjusted position
+                        }
+                    }
+                    .frame(width: 120, height: 400)
+                    .clipShape(RoundedRectangle(cornerRadius: 30))
+                }
+                .overlay(
+                    // Play/Pause Button
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            isRunning.toggle()
+                        }
+                    }) {
+                        Image(systemName: isRunning ? "pause.fill" : "play.fill")
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .frame(width: 60, height: 60) // Increased button size
+                            .background(Color.black.opacity(0.3))
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(SuperhumanTheme.primaryColor.opacity(0.5), lineWidth: 2)
+                            )
+                    }
+                    .offset(y: 240), // Adjusted position
+                    alignment: .center
+                )
+                
+                Spacer()
                 
                 // Control Buttons
                 HStack(spacing: 30) {
@@ -440,7 +429,7 @@ struct ExerciseTimerView: View {
                             .animation(.spring(response: 0.5, dampingFraction: 0.6), value: isRunning)
                     }
                     
-                    // Close Button
+                    // Complete Button
                     Button(action: {
                         dismiss()
                     }) {
@@ -453,11 +442,16 @@ struct ExerciseTimerView: View {
                             .cornerRadius(25)
                     }
                 }
+                .padding(.bottom, 40) // Added bottom padding
             }
         }
         .onAppear {
             startTimer()
             startMotivationalMessageTimer()
+            // Start wave animation
+            withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
+                waveOffset = .pi * 2
+            }
         }
     }
     
@@ -468,23 +462,9 @@ struct ExerciseTimerView: View {
             if timeRemaining > 0 {
                 timeRemaining -= 0.1
                 progress = timeRemaining / duration
-                
-                // Pulse glow effect
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    glowOpacity = 0.8
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    withAnimation(.easeOut(duration: 0.3)) {
-                        glowOpacity = 0
-                    }
-                }
             } else {
                 timer.invalidate()
                 hapticFeedback()
-                // Final animation
-                withAnimation(.spring()) {
-                    glowOpacity = 1
-                }
             }
         }
     }
@@ -493,7 +473,6 @@ struct ExerciseTimerView: View {
         timeRemaining = duration
         progress = 1.0
         isRunning = false
-        glowOpacity = 0
     }
     
     private func hapticFeedback() {
@@ -512,6 +491,45 @@ struct ExerciseTimerView: View {
                 currentMessage = motivationalMessages.randomElement() ?? currentMessage
             }
         }
+    }
+}
+
+// Wave Shape for Animation
+struct WaveShape: Shape {
+    var offset: Double
+    var percent: Double
+    var amplitude: Double = 5 // Wave height
+    var frequency: Double = 2 // Wave frequency
+    
+    var animatableData: Double {
+        get { offset }
+        set { offset = newValue }
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let width = rect.width
+        let height = rect.height
+        let progressHeight = height * (1 - percent)
+        let midWidth = width / 2
+        
+        path.move(to: CGPoint(x: 0, y: height))
+        path.addLine(to: CGPoint(x: 0, y: progressHeight))
+        
+        // Create more natural wave effect
+        for x in stride(from: 0, through: width, by: 1) {
+            let relativeX = x / midWidth
+            let normalizedX = relativeX * .pi * frequency
+            let sine = sin(normalizedX + offset)
+            let y = progressHeight + sine * amplitude
+            path.addLine(to: CGPoint(x: x, y: y))
+        }
+        
+        path.addLine(to: CGPoint(x: width, y: height))
+        path.closeSubpath()
+        
+        return path
     }
 }
 
