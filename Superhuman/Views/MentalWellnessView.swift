@@ -1,9 +1,10 @@
 import SwiftUI
+import AVKit
 
 struct MentalWellnessView: View {
     @State private var selectedType: MentalWellnessType?
-    @State private var showingActivityDetail = false
     @State private var selectedActivity: MentalWellnessActivity?
+    @StateObject private var viewModel = MentalWellnessViewModel()
     
     var body: some View {
         NavigationView {
@@ -22,73 +23,110 @@ struct MentalWellnessView: View {
                 .padding(.top, 16)
                 
                 ScrollView {
-                    VStack(spacing: 24) {
-                        // Categories Grid
-                        LazyVGrid(columns: [
-                            GridItem(.flexible()),
-                            GridItem(.flexible())
-                        ], spacing: 16) {
-                            ForEach(MentalWellnessType.allCases) { type in
-                                WellnessTypeCard(type: type) {
-                                    selectedType = type
-                                }
+                    // Categories Grid
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 16) {
+                        ForEach(MentalWellnessType.allCases) { type in
+                            WellnessTypeCard(type: type) {
+                                selectedType = type
+                                selectedActivity = viewModel.getRandomActivity(for: type)
                             }
                         }
-                        .padding(.horizontal)
-                        .padding(.top, 16)
-                        
-                        // Activities List
-                        if let type = selectedType {
-                            activitiesList(for: type)
-                        }
                     }
+                    .padding(.horizontal)
+                    .padding(.top, 16)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(item: $selectedActivity) { activity in
-                MentalWellnessDetailView(activity: activity)
+            .fullScreenCover(item: $selectedActivity) { activity in
+                NavigationView {
+                    MentalWellnessDetailView(activity: activity, selectedType: $selectedType)
+                        .navigationBarBackButtonHidden(true)
+                        .navigationBarItems(
+                            leading: Button {
+                                selectedActivity = nil
+                                selectedType = nil
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "chevron.left")
+                                    Text("Back")
+                                }
+                                .foregroundColor(SuperhumanTheme.primaryColor)
+                            },
+                            trailing: HStack(spacing: 16) {
+                                // Change Activity Button
+                                Button {
+                                    if let type = selectedType {
+                                        selectedActivity = viewModel.getRandomActivity(for: type)
+                                    }
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "shuffle")
+                                        Text("Change")
+                                    }
+                                    .foregroundColor(SuperhumanTheme.primaryColor)
+                                }
+                                
+                                // Complete Button
+                                Button("Complete") {
+                                    handleActivityCompletion(activity)
+                                }
+                                .foregroundColor(SuperhumanTheme.primaryColor)
+                                .font(.headline)
+                            }
+                        )
+                }
+                .interactiveDismissDisabled()
             }
         }
     }
     
-    private func activitiesList(for type: MentalWellnessType) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(type.rawValue)
-                .font(.title2.bold())
-                .padding(.horizontal)
-            
-            ForEach(MentalWellnessDatabase.activitiesForType(type)) { activity in
-                WellnessActivityCard(activity: activity) {
-                    selectedActivity = activity
-                }
-            }
-        }
+    private func handleActivityCompletion(_ activity: MentalWellnessActivity) {
+        // Post notification for progress tracking
+        NotificationCenter.default.post(
+            name: NSNotification.Name("MentalWellnessActivityCompleted"),
+            object: activity
+        )
+        selectedActivity = nil
+        selectedType = nil
     }
 }
 
 struct MentalWellnessDetailView: View {
     let activity: MentalWellnessActivity
-    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedType: MentalWellnessType?
+    @State private var selectedTab = 0
+    @State private var showingTimer = false
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Header
-                    VStack(spacing: 8) {
+        ScrollView {
+            VStack(spacing: 24) {
+                // Header Section
+                VStack(spacing: 16) {
+                    // Video or Icon
+                    if let videoURL = activity.videoURL {
+                        VideoPlayer(player: AVPlayer(url: videoURL))
+                            .frame(height: 220)
+                    } else {
                         Image(systemName: activity.type.icon)
-                            .font(.system(size: 60))
-                            .foregroundColor(.white)
-                            .frame(width: 100, height: 100)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 220)
+                            .foregroundColor(activity.type.color[0])
+                            .padding()
                             .background(
                                 LinearGradient(
                                     colors: activity.type.color,
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
-                                )
+                                ).opacity(0.2)
                             )
-                            .clipShape(Circle())
-                        
+                    }
+                    
+                    // Title and Description
+                    VStack(spacing: 8) {
                         Text(activity.title)
                             .font(.title2.bold())
                         
@@ -96,69 +134,95 @@ struct MentalWellnessDetailView: View {
                             .font(.body)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal)
                     }
+                    .padding(.horizontal)
                     
-                    // Steps Section
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Steps")
-                            .font(.headline)
-                        
-                        ForEach(Array(activity.steps.enumerated()), id: \.offset) { index, step in
-                            HStack(alignment: .top, spacing: 16) {
-                                Text("\(index + 1)")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .frame(width: 24, height: 24)
-                                    .background(Circle().fill(activity.type.color[0]))
-                                
-                                Text(step)
-                                    .font(.body)
+                    // Duration Badge
+                    HStack(spacing: 20) {
+                        StatBadge(icon: "clock", text: activity.formattedDuration)
+                    }
+                }
+                
+                // Content Tabs
+                VStack(spacing: 0) {
+                    HStack {
+                        ForEach(["Steps", "Benefits", "Tips"], id: \.self) { tab in
+                            let index = ["Steps", "Benefits", "Tips"].firstIndex(of: tab) ?? 0
+                            TabButton(text: tab, isSelected: selectedTab == index) {
+                                withAnimation {
+                                    selectedTab = index
+                                }
                             }
                         }
                     }
-                    .padding()
-                    .background(Color.white.opacity(0.05))
-                    .cornerRadius(12)
+                    .padding(.horizontal)
                     
-                    // Benefits Section
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Benefits")
-                            .font(.headline)
-                        
-                        ForEach(activity.benefits, id: \.self) { benefit in
-                            HStack(spacing: 12) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(activity.type.color[0])
-                                Text(benefit)
-                            }
-                        }
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(height: 1)
+                }
+                
+                // Tab Content
+                VStack(alignment: .leading, spacing: 20) {
+                    switch selectedTab {
+                    case 0:
+                        StepsView(steps: activity.steps)
+                    case 1:
+                        BenefitsView(benefits: activity.benefits)
+                    case 2:
+                        TipsView(tips: activity.tips)
+                    default:
+                        EmptyView()
                     }
-                    .padding()
-                    .background(Color.white.opacity(0.05))
-                    .cornerRadius(12)
-                    
-                    // Tips Section
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Tips")
-                            .font(.headline)
-                        
-                        ForEach(activity.tips, id: \.self) { tip in
-                            HStack(spacing: 12) {
-                                Image(systemName: "lightbulb.fill")
-                                    .foregroundColor(.yellow)
-                                Text(tip)
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.05))
-                    .cornerRadius(12)
                 }
                 .padding()
+                .transition(.opacity)
+                .animation(.easeInOut, value: selectedTab)
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(trailing: Button("Done") { dismiss() })
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingTimer = true
+                } label: {
+                    Image(systemName: "timer")
+                        .foregroundColor(SuperhumanTheme.primaryColor)
+                }
+            }
+        }
+        .sheet(isPresented: $showingTimer) {
+            ExerciseTimerView(duration: activity.duration)
+        }
+    }
+}
+
+class MentalWellnessViewModel: ObservableObject {
+    func getRandomActivity(for type: MentalWellnessType) -> MentalWellnessActivity? {
+        let activities = MentalWellnessDatabase.activitiesForType(type)
+        return activities.randomElement()
+    }
+}
+
+// Supporting Views
+struct StepsView: View {
+    let steps: [String]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                HStack(alignment: .top, spacing: 16) {
+                    Text("\(index + 1)")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: 32, height: 32)
+                        .background(SuperhumanTheme.primaryColor)
+                        .clipShape(Circle())
+                    
+                    Text(step)
+                        .font(.body)
+                }
+            }
         }
     }
 }

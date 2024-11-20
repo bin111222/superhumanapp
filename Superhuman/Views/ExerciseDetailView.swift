@@ -146,8 +146,8 @@ struct ExerciseDetailView: View {
     private var tabSection: some View {
         VStack(spacing: 0) {
             HStack {
-                ForEach(["Instructions", "Benefits", "Tips"], id: \.self) { tab in
-                    let index = ["Instructions", "Benefits", "Tips"].firstIndex(of: tab) ?? 0
+                ForEach(["Instructions", "Benefits"], id: \.self) { tab in
+                    let index = ["Instructions", "Benefits"].firstIndex(of: tab) ?? 0
                     TabButton(text: tab, isSelected: selectedTab == index) {
                         withAnimation {
                             selectedTab = index
@@ -170,8 +170,6 @@ struct ExerciseDetailView: View {
                 InstructionsView(steps: currentExercise.steps)
             case 1:
                 BenefitsView(benefits: currentExercise.benefits)
-            case 2:
-                TipsView(bodyPart: currentExercise.bodyPart)
             default:
                 EmptyView()
             }
@@ -187,47 +185,6 @@ struct ExerciseDetailView: View {
                 currentExercise = newExercise
             }
         }
-    }
-}
-
-struct TabButton: View {
-    let text: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Text(text)
-                    .font(.subheadline)
-                    .fontWeight(isSelected ? .bold : .regular)
-                    .foregroundColor(isSelected ? .white : .gray)
-                
-                Rectangle()
-                    .fill(isSelected ? SuperhumanTheme.primaryColor : Color.clear)
-                    .frame(height: 2)
-            }
-        }
-        .frame(maxWidth: .infinity)
-    }
-}
-
-// MARK: - Supporting Views
-struct StatBadge: View {
-    let icon: String
-    let text: String
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            Image(systemName: icon)
-                .foregroundColor(SuperhumanTheme.primaryColor)
-            Text(text)
-                .font(.subheadline)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(12)
     }
 }
 
@@ -263,57 +220,6 @@ struct InstructionsView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(Color.gray.opacity(0.1), lineWidth: 1)
                 )
-            }
-        }
-    }
-}
-
-struct BenefitsView: View {
-    let benefits: [String]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            ForEach(benefits, id: \.self) { benefit in
-                HStack(spacing: 12) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(SuperhumanTheme.primaryColor)
-                    Text(benefit)
-                }
-            }
-        }
-    }
-}
-
-struct TipsView: View {
-    let bodyPart: BodyPart
-    
-    var tips: [String] {
-        // Add specific tips for each body part
-        switch bodyPart {
-        case .wrists:
-            return [
-                "Keep movements slow and controlled",
-                "Stop if you feel pain",
-                "Maintain neutral wrist position when possible"
-            ]
-        // Add cases for other body parts
-        default:
-            return [
-                "Start with easier variations",
-                "Focus on proper form",
-                "Breathe steadily throughout"
-            ]
-        }
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            ForEach(tips, id: \.self) { tip in
-                HStack(spacing: 12) {
-                    Image(systemName: "lightbulb.fill")
-                        .foregroundColor(.yellow)
-                    Text(tip)
-                }
             }
         }
     }

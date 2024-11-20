@@ -35,14 +35,34 @@ enum MentalWellnessType: String, CaseIterable, Identifiable {
 }
 
 struct MentalWellnessActivity: Identifiable {
-    let id = UUID()
+    var id = UUID()
     let type: MentalWellnessType
     let title: String
     let description: String
     let duration: TimeInterval
+    let videoURL: URL?
     let steps: [String]
     let benefits: [String]
     let tips: [String]
+    
+    init(type: MentalWellnessType, 
+         title: String, 
+         description: String, 
+         duration: TimeInterval, 
+         steps: [String], 
+         benefits: [String], 
+         tips: [String],
+         videoURL: URL? = nil) {
+        self.id = UUID()
+        self.type = type
+        self.title = title
+        self.description = description
+        self.duration = duration
+        self.steps = steps
+        self.benefits = benefits
+        self.tips = tips
+        self.videoURL = videoURL
+    }
     
     var formattedDuration: String {
         let minutes = Int(duration) / 60
