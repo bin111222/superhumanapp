@@ -40,6 +40,7 @@ struct ExerciseDetailView: View {
     @State private var showingTimer = false
     @State private var isBookmarked = false
     @State private var isLoading = false
+    @State private var videoKey = UUID()
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = ExercisesViewModel()
     @State private var currentExercise: Exercise
@@ -53,12 +54,9 @@ struct ExerciseDetailView: View {
     }
     
     var body: some View {
-        // Wrap the entire content in a ZStack to control view hierarchy
+        // Wrap everything in a ZStack for proper layering
         ZStack {
-            // Background color to prevent any bleed-through
-            Color.black
-                .edgesIgnoringSafeArea(.all)
-            
+            // Main content
             ScrollView {
                 VStack(spacing: 24) {
                     exerciseHeader
@@ -95,23 +93,17 @@ struct ExerciseDetailView: View {
                 }
             }
             
-            // Loading overlay
+            // Full screen loading overlay
             if isLoading {
                 Color.black
-                    .opacity(0.9)
+                    .opacity(1)
                     .edgesIgnoringSafeArea(.all)
                     .overlay(
-                        VStack(spacing: 16) {
-                            ProgressView()
-                                .scaleEffect(1.5)
-                                .tint(.white)
-                            Text("Loading new exercise...")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
+                        Text("Loading new exercise...")
+                            .foregroundColor(.white)
+                            .font(.headline)
                     )
                     .transition(.opacity)
-                    .zIndex(999)
             }
         }
         .sheet(isPresented: $showingTimer) {
@@ -128,6 +120,7 @@ struct ExerciseDetailView: View {
             // Add a slight delay to ensure loading state is visible
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation(.easeInOut(duration: 0.3)) {
+                    videoKey = UUID()
                     currentExercise = newExercise
                     isLoading = false
                 }
@@ -185,6 +178,7 @@ struct ExerciseDetailView: View {
                         .frame(height: 500)
                         .cornerRadius(15)
                         .opacity(isLoading ? 0 : 1)
+                        .id(videoKey)
                 } else {
                     Image(systemName: "figure.mixed.cardio")
                         .resizable()

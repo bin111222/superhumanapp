@@ -14,7 +14,7 @@ struct HomeView: View {
                 VStack(spacing: 32) {
 
                       // Welcome Header
-                    Text("Hey, \(userName)! Let's get going?")
+                    Text("Hey, \(userName)! Let's get going? It's time to ")
                         .font(.system(.title2, design: .rounded))
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity, alignment: .leading)
