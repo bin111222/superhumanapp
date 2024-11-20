@@ -96,7 +96,7 @@ struct ExerciseDetailView: View {
             // Exercise Image or Video
             if let videoURL = currentExercise.videoURL {
                 EnhancedVideoPlayer(url: videoURL)
-                    .frame(height: 220)
+                    .frame(height: 500)
             } else {
                 Image(systemName: "figure.mixed.cardio")
                     .resizable()

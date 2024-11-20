@@ -9,7 +9,7 @@ struct ExerciseDatabase {
             description: "Gentle stretch targeting the inner forearm muscles",
             difficulty: .beginner,
             duration: 300,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_1af23d624a3842fb83ad414de5f0e8f5/480p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Extend your arm forward with palm facing up",
                 "Use other hand to gently pull fingers down and back",
@@ -28,7 +28,7 @@ struct ExerciseDatabase {
             description: "Circular movements to improve mobility",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_09c5b78127d44158a30fcdb4128ed979/480p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Make a fist with both hands",
                 "Rotate wrists in clockwise circles for 30 seconds",
@@ -47,6 +47,7 @@ struct ExerciseDatabase {
             description: "Stretching exercise for wrist flexors",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place palms together in front of chest",
                 "Lower hands toward waist while keeping palms together",
@@ -65,6 +66,7 @@ struct ExerciseDatabase {
             description: "Advanced stretch for wrist extensors",
             difficulty: .intermediate,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place backs of hands together at lower back",
                 "Raise hands up gently to feel stretch",
@@ -83,6 +85,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for wrist extensors",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold arm straight with palm facing down",
                 "Lift hand upward, bending at wrist",
@@ -101,6 +104,7 @@ struct ExerciseDatabase {
             description: "Side-to-side wrist movements",
             difficulty: .intermediate,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Rest forearm on table with hand over edge",
                 "Move wrist side to side",
@@ -120,6 +124,7 @@ struct ExerciseDatabase {
             description: "Rotation exercise for forearm and wrist mobility",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold arm out straight with palm down",
                 "Rotate forearm to turn palm up",
@@ -139,6 +144,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for grip and wrist muscles",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold a tennis ball in hand",
                 "Squeeze ball firmly",
@@ -160,6 +166,7 @@ struct ExerciseDatabase {
             description: "Side-to-side neck mobility exercise",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with straight spine",
                 "Gently tilt head to right shoulder",
@@ -180,6 +187,7 @@ struct ExerciseDatabase {
             description: "Isometric exercise for neck strength",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place hand on forehead",
                 "Push head into hand while resisting movement",
@@ -201,6 +209,7 @@ struct ExerciseDatabase {
             description: "Gentle stretching for neck tension relief",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit or stand with straight posture",
                 "Slowly tilt head to right shoulder",
@@ -220,6 +229,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for deep neck flexors",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with back straight",
                 "Draw chin straight back (make double chin)",
@@ -238,6 +248,7 @@ struct ExerciseDatabase {
             description: "Stretch targeting side of neck",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with back straight",
                 "Turn head 45 degrees to right",
@@ -258,6 +269,7 @@ struct ExerciseDatabase {
             description: "Stretch to relieve neck and shoulder tension",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit or stand with good posture",
                 "Gently pull head toward right armpit",
@@ -277,6 +289,7 @@ struct ExerciseDatabase {
             description: "Gentle rotational movements for neck mobility",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with good posture",
                 "Slowly turn head to look over right shoulder",
@@ -296,6 +309,7 @@ struct ExerciseDatabase {
             description: "Resistance exercises for neck strength",
             difficulty: .intermediate,
             duration: 360,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place hand on forehead",
                 "Push head into hand while resisting movement",
@@ -316,6 +330,7 @@ struct ExerciseDatabase {
             description: "Side-to-side neck mobility exercise",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with straight spine",
                 "Gently tilt head to right shoulder",
@@ -336,6 +351,7 @@ struct ExerciseDatabase {
             description: "Isometric exercise for neck strength",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place hand on forehead",
                 "Push head into hand while resisting movement",
@@ -358,6 +374,7 @@ struct ExerciseDatabase {
             description: "Foundation exercise for pelvic floor strength",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Contract pelvic floor muscles",
                 "Hold for 5 seconds",
@@ -377,6 +394,7 @@ struct ExerciseDatabase {
             description: "Rapid contractions for pelvic floor endurance",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Contract and release quickly",
                 "Perform 10 quick contractions",
@@ -395,6 +413,7 @@ struct ExerciseDatabase {
             description: "Combines squats with pelvic floor contraction",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with back against wall",
                 "Lower into squat while contracting pelvic floor",
@@ -414,6 +433,7 @@ struct ExerciseDatabase {
             description: "Combines glute bridge with pelvic floor contraction",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lie on back with knees bent",
                 "Contract pelvic floor muscles",
@@ -434,6 +454,7 @@ struct ExerciseDatabase {
             description: "Progressive pelvic floor engagement",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Imagine pelvic floor as elevator",
                 "Contract muscles progressively higher",
@@ -453,6 +474,7 @@ struct ExerciseDatabase {
             description: "Combined core and pelvic floor exercise",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lie on back with knees bent",
                 "Tilt pelvis to flatten lower back",
@@ -473,6 +495,7 @@ struct ExerciseDatabase {
             description: "Dynamic pelvic floor engagement exercise",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with feet hip-width apart",
                 "Gently tilt pelvis forward and back",
@@ -492,6 +515,7 @@ struct ExerciseDatabase {
             description: "Rhythmic pelvic floor muscle contractions",
             difficulty: .intermediate,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit on a firm chair",
                 "Perform quick, light pelvic floor contractions",
@@ -513,6 +537,7 @@ struct ExerciseDatabase {
             description: "Mobility exercise for ankle joints",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lift foot off ground",
                 "Rotate ankle clockwise 10 times",
@@ -531,6 +556,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for ankles and calves",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand on edge of step",
                 "Rise up on toes",
@@ -550,6 +576,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for anterior ankles",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with feet shoulder-width apart",
                 "Lift toes off ground while keeping heels down",
@@ -570,6 +597,7 @@ struct ExerciseDatabase {
             description: "Strengthens ankle dorsiflexors",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with legs extended",
                 "Loop band around foot, hold ends",
@@ -591,6 +619,7 @@ struct ExerciseDatabase {
             description: "Single-leg balance for ankle stability",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand on one leg",
                 "Hold position for 30 seconds",
@@ -610,6 +639,7 @@ struct ExerciseDatabase {
             description: "Ankle and lower leg strength exercise",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Walk 10 steps on heels",
                 "Keep toes lifted off ground",
@@ -631,6 +661,7 @@ struct ExerciseDatabase {
             description: "Stretching exercise for the front of the hips",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Kneel on right knee, left foot in front",
                 "Push hips forward gently",
@@ -650,6 +681,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for glutes and hips",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lie on back with knees bent",
                 "Lift hips by squeezing glutes",
@@ -670,6 +702,7 @@ struct ExerciseDatabase {
             description: "Deep stretch for hip rotators",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Begin in plank position",
                 "Bring right knee forward behind right wrist",
@@ -690,6 +723,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for hip abductors",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lie on side with knees bent",
                 "Keep feet together, lift top knee",
@@ -711,6 +745,7 @@ struct ExerciseDatabase {
             description: "Dynamic mobility exercise for hips",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand on one leg",
                 "Rotate other leg in large circles",
@@ -730,6 +765,7 @@ struct ExerciseDatabase {
             description: "Lateral hip strengthening exercise",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with feet together",
                 "Lift leg out to side",
@@ -753,6 +789,7 @@ struct ExerciseDatabase {
             description: "Mobility exercise for shoulder joints",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand or sit up straight",
                 "Roll shoulders forward in circular motion 10 times",
@@ -771,6 +808,7 @@ struct ExerciseDatabase {
             description: "Stretching exercise for chest and shoulders",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand in doorway with arms on door frame",
                 "Step forward slowly to feel a stretch",
@@ -789,6 +827,7 @@ struct ExerciseDatabase {
             description: "Mobility exercise for shoulders and upper back",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with back against wall",
                 "Place arms at 90 degrees against wall",
@@ -808,6 +847,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for rotator cuff",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold resistance band in both hands",
                 "Keep elbows at sides, bent at 90 degrees",
@@ -828,6 +868,7 @@ struct ExerciseDatabase {
             description: "Strengthening for rotator cuff",
             difficulty: .intermediate,
             duration: 360,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with elbow at side, bent 90°",
                 "Rotate arm outward",
@@ -848,6 +889,7 @@ struct ExerciseDatabase {
             description: "Dynamic warm-up for shoulder mobility",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand with arms extended",
                 "Make small forward circles",
@@ -868,6 +910,7 @@ struct ExerciseDatabase {
             description: "Posture and upper back strengthening",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Stand or sit with straight back",
                 "Squeeze shoulder blades together",
@@ -890,6 +933,7 @@ struct ExerciseDatabase {
             description: "Dynamic stretch for spine flexibility",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Start on hands and knees",
                 "Arch back up (cat position)",
@@ -909,7 +953,7 @@ struct ExerciseDatabase {
             description: "Restorative yoga pose for back relaxation",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_09c5b78127d44158a30fcdb4128ed979/480p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Kneel on the floor, sit back on heels",
                 "Lean forward, extending arms forward",
@@ -929,6 +973,7 @@ struct ExerciseDatabase {
             description: "Core stability exercise",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Start on hands and knees",
                 "Extend right arm forward and left leg back",
@@ -949,6 +994,7 @@ struct ExerciseDatabase {
             description: "Stretch for lower back and hamstrings",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit with legs extended forward",
                 "Reach toward toes while keeping back straight",
@@ -967,6 +1013,7 @@ struct ExerciseDatabase {
             description: "Spinal mobility exercise",
             difficulty: .beginner,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Start on hands and knees",
                 "Arch back upward (Cat)",
@@ -986,6 +1033,7 @@ struct ExerciseDatabase {
             description: "Stability exercise for back and core",
             difficulty: .intermediate,
             duration: 360,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Start on hands and knees",
                 "Extend opposite arm and leg",
@@ -1006,6 +1054,7 @@ struct ExerciseDatabase {
             description: "Back extension exercise for core strength",
             difficulty: .intermediate,
             duration: 300,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lie face down on floor",
                 "Simultaneously lift arms and legs",
@@ -1026,6 +1075,7 @@ struct ExerciseDatabase {
             description: "Gentle back strengthening exercise",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Lie face down, arms by sides",
                 "Lift upper body slightly off ground",
@@ -1047,6 +1097,7 @@ struct ExerciseDatabase {
             description: "Exercise to relieve jaw tension",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Sit comfortably with relaxed shoulders",
                 "Gently open mouth as wide as comfortable",
@@ -1066,6 +1117,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for jaw muscles",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place thumb under chin",
                 "Gently press down while trying to open mouth",
@@ -1085,6 +1137,7 @@ struct ExerciseDatabase {
             description: "Exercise to improve jaw movement",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Place tongue on roof of mouth",
                 "Slowly open mouth as wide as comfortable",
@@ -1104,6 +1157,7 @@ struct ExerciseDatabase {
             description: "Exercise to enhance lateral jaw movement",
             difficulty: .intermediate,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Gently move jaw to the left",
                 "Hold for 5 seconds",
@@ -1123,6 +1177,7 @@ struct ExerciseDatabase {
             description: "Gentle exercises for TMJ relief",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Rest tongue on roof of mouth",
                 "Allow jaw to relax completely",
@@ -1142,6 +1197,7 @@ struct ExerciseDatabase {
             description: "Stretching exercises for jaw mobility",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Open mouth slowly and widely",
                 "Hold for 5 seconds",
@@ -1161,6 +1217,7 @@ struct ExerciseDatabase {
             description: "TMJ relief and jaw muscle relaxation",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Press tongue against roof of mouth",
                 "Hold for 5 seconds",
@@ -1179,6 +1236,7 @@ struct ExerciseDatabase {
             description: "Combined neck and jaw mobility exercise",
             difficulty: .intermediate,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Gently turn head to right",
                 "Place hand on jaw for gentle resistance",
@@ -1200,6 +1258,7 @@ struct ExerciseDatabase {
             description: "Relaxation technique to relieve eye strain",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Rub palms together to generate heat",
                 "Gently place palms over closed eyes",
@@ -1218,6 +1277,7 @@ struct ExerciseDatabase {
             description: "Exercise to improve eye flexibility",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold finger a few inches from eye",
                 "Focus on finger, then on object 10 feet away",
@@ -1236,6 +1296,7 @@ struct ExerciseDatabase {
             description: "Exercise to relax eye muscles",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Close eyes gently",
                 "Slowly roll eyes in circular motion",
@@ -1256,6 +1317,7 @@ struct ExerciseDatabase {
             description: "Eye focusing and coordination exercise",
             difficulty: .beginner,
             duration: 240,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold thumb 6 inches from face",
                 "Focus on thumb for 5 seconds",
@@ -1276,6 +1338,7 @@ struct ExerciseDatabase {
             description: "Convergence exercise for eye coordination",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Hold pencil at arm's length",
                 "Slowly bring pencil closer to nose",
@@ -1296,6 +1359,7 @@ struct ExerciseDatabase {
             description: "Enhances eye coordination and flexibility",
             difficulty: .beginner,
             duration: 180,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Imagine a large figure eight in front of you",
                 "Trace it slowly with your eyes for 1 minute",
@@ -1319,6 +1383,7 @@ struct ExerciseDatabase {
             description: "Advanced grip and forearm strength challenge",
             difficulty: .advanced,
             duration: 480,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Use a weighted wrist roller with 10-15 lbs",
                 "Roll weight up using only wrist movement",
@@ -1339,6 +1404,7 @@ struct ExerciseDatabase {
             description: "Advanced isometric wrist strengthening",
             difficulty: .advanced,
             duration: 600,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Start in push-up position with fingers pointing backward",
                 "Shift weight forward, maintaining straight arms",
@@ -1361,6 +1427,7 @@ struct ExerciseDatabase {
             description: "Advanced neck strength and mobility exercise",
             difficulty: .advanced,
             duration: 420,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Begin in wrestler's bridge position",
                 "Slowly roll head side to side",
@@ -1381,6 +1448,7 @@ struct ExerciseDatabase {
             description: "Multi-directional neck resistance training",
             difficulty: .advanced,
             duration: 480,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Secure heavy resistance band at head height",
                 "Perform resistance movements in all directions",
@@ -1403,6 +1471,7 @@ struct ExerciseDatabase {
             description: "Complex pelvic floor and core stabilization",
             difficulty: .advanced,
             duration: 600,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Balance on stability ball in half-kneeling position",
                 "Perform simultaneous pelvic floor contraction",
@@ -1423,6 +1492,7 @@ struct ExerciseDatabase {
             description: "High-intensity pelvic floor conditioning",
             difficulty: .advanced,
             duration: 480,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform explosive jump squats",
                 "Integrate maximum pelvic floor contraction during landing",
@@ -1445,6 +1515,7 @@ struct ExerciseDatabase {
             description: "Advanced ankle stability and proprioception",
             difficulty: .advanced,
             duration: 540,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Use unstable surface like BOSU or balance board",
                 "Perform complex single-leg movements",
@@ -1465,6 +1536,7 @@ struct ExerciseDatabase {
             description: "High-intensity ankle strength and reactivity",
             difficulty: .advanced,
             duration: 600,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform depth jumps from elevated platforms",
                 "Focus on minimal ground contact time",
@@ -1487,6 +1559,7 @@ struct ExerciseDatabase {
             description: "Complex hip mobility and strength integration",
             difficulty: .advanced,
             duration: 600,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Use heavy kettlebell for dynamic mobility sequences",
                 "Perform continuous flow between Turkish get-ups",
@@ -1507,6 +1580,7 @@ struct ExerciseDatabase {
             description: "Ultimate single-leg strength and stability",
             difficulty: .advanced,
             duration: 480,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform full range single-leg squats",
                 "Progress to weighted and elevated variations",
@@ -1529,6 +1603,7 @@ struct ExerciseDatabase {
             description: "Multi-plane shoulder strength and mobility",
             difficulty: .advanced,
             duration: 540,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Use rings or suspension trainers",
                 "Perform complex gymnastic-style shoulder movements",
@@ -1549,6 +1624,7 @@ struct ExerciseDatabase {
             description: "Ultimate shoulder strength and stabilization",
             difficulty: .advanced,
             duration: 600,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform overhead lifts with maximal loads",
                 "Include standing and seated variations",
@@ -1571,6 +1647,7 @@ struct ExerciseDatabase {
             description: "Comprehensive spinal conditioning",
             difficulty: .advanced,
             duration: 540,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform advanced spine mobility flows",
                 "Include complex twisting and extension sequences",
@@ -1591,6 +1668,7 @@ struct ExerciseDatabase {
             description: "Ultimate lower back and posterior chain strength",
             difficulty: .advanced,
             duration: 480,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform complex deadlift variations",
                 "Include deficit, pause, and tempo modifications",
@@ -1613,6 +1691,7 @@ struct ExerciseDatabase {
             description: "Comprehensive jaw mobility and tension release",
             difficulty: .advanced,
             duration: 420,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform complex jaw mobilization techniques",
                 "Include myofascial release and muscle energy techniques",
@@ -1633,6 +1712,7 @@ struct ExerciseDatabase {
             description: "Ultimate jaw muscle control and strength",
             difficulty: .advanced,
             duration: 480,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform complex jaw resistance protocols",
                 "Include isometric and dynamic resistance variations",
@@ -1655,6 +1735,7 @@ struct ExerciseDatabase {
             description: "Ultimate eye muscle coordination and control",
             difficulty: .advanced,
             duration: 600,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform complex multi-object visual tracking",
                 "Include rapid movement and changing patterns",
@@ -1675,6 +1756,7 @@ struct ExerciseDatabase {
             description: "Complex visual-cognitive performance training",
             difficulty: .advanced,
             duration: 540,
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
             steps: [
                 "Perform advanced visual-cognitive integration tasks",
                 "Include rapid decision-making with visual cues",

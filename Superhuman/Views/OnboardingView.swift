@@ -8,9 +8,9 @@ struct OnboardingView: View {
     
     let onboardingPages = [
         OnboardingPage(
-            image: "figure.walk",
-            title: "Welcome to Superhuman",
-            description: "Your journey to becoming superhuman starts here. Just 30 minutes a day can transform your life."
+            image: "figure.run.treadmill",
+            title: "Ready to be a Superhuman?",
+            description: "30 minutes a day can transform your life."
         ),
         OnboardingPage(
             image: "figure.mind.and.body",
@@ -20,7 +20,7 @@ struct OnboardingView: View {
         OnboardingPage(
             image: "chart.line.uptrend.xyaxis",
             title: "Track Your Progress",
-            description: "Monitor your improvements and celebrate your achievements as you become stronger every day."
+            description: "The aim is to be 1% better everyday to be 37 times better by the end of the year"
         )
     ]
     
@@ -59,7 +59,7 @@ struct OnboardingPageView: View {
     let action: () -> Void
     
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 90) {
             Spacer()
             
             Image(systemName: page.image)
@@ -84,7 +84,7 @@ struct OnboardingPageView: View {
                 .padding(.horizontal)
             
             Spacer()
-                .frame(height: 60)
+                .frame(height: 10)
         }
     }
 }
