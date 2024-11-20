@@ -36,6 +36,18 @@ struct ProgressView: View {
             }
             .navigationTitle("This Week")
         }
+        .onAppear {
+            // Load data when view appears
+            viewModel.loadCompletedExercises()
+        }
+        // Add notification observer for exercise completion
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ExerciseCompleted"))) { notification in
+            if let exercise = notification.object as? Exercise {
+                withAnimation(.easeInOut) {
+                    viewModel.handleExerciseCompletion(exercise)
+                }
+            }
+        }
     }
     
     private var weeklyProgressHeader: some View {

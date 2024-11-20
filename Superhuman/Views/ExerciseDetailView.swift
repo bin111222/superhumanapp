@@ -39,9 +39,13 @@ struct ExerciseDetailView: View {
     @State private var selectedTab = 0
     @State private var showingTimer = false
     @State private var isBookmarked = false
+    @State private var isLoading = false
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = ExercisesViewModel()
     @State private var currentExercise: Exercise
+    
+    // Add a namespace for transitions
+    @Namespace private var animation
     
     init(exercise: Exercise) {
         self.exercise = exercise
@@ -49,41 +53,65 @@ struct ExerciseDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                // Header Section
-                exerciseHeader
-                
-                // Main Content Tabs
-                tabSection
-                
-                // Content based on selected tab
-                tabContent
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack(spacing: 16) {
-                    // Change Exercise Button
-                    Button {
-                        changeExercise()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "shuffle")
-                            Text("Change")
-                        }
-                        .foregroundColor(SuperhumanTheme.primaryColor)
-                    }
+        // Wrap the entire content in a ZStack to control view hierarchy
+        ZStack {
+            // Background color to prevent any bleed-through
+            Color.black
+                .edgesIgnoringSafeArea(.all)
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    exerciseHeader
                     
-                    Button {
-                        showingTimer = true
-                    } label: {
-                        Image(systemName: "timer")
-                            .foregroundColor(SuperhumanTheme.primaryColor)
+                    if !isLoading {
+                        tabSection
+                        tabContent
                     }
                 }
+            }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack(spacing: 16) {
+                        Button {
+                            changeExercise()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "shuffle")
+                                Text("Change")
+                            }
+                            .foregroundColor(SuperhumanTheme.primaryColor)
+                        }
+                        .disabled(isLoading)
+                        
+                        Button {
+                            showingTimer = true
+                        } label: {
+                            Image(systemName: "timer")
+                                .foregroundColor(SuperhumanTheme.primaryColor)
+                        }
+                    }
+                }
+            }
+            
+            // Loading overlay
+            if isLoading {
+                Color.black
+                    .opacity(0.9)
+                    .edgesIgnoringSafeArea(.all)
+                    .overlay(
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .scaleEffect(1.5)
+                                .tint(.white)
+                            Text("Loading new exercise...")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
+                    )
+                    .transition(.opacity)
+                    .zIndex(999)
             }
         }
         .sheet(isPresented: $showingTimer) {
@@ -91,55 +119,19 @@ struct ExerciseDetailView: View {
         }
     }
     
-    private var exerciseHeader: some View {
-        VStack(spacing: 16) {
-            // Exercise Image or Video
-            if let videoURL = currentExercise.videoURL {
-                EnhancedVideoPlayer(url: videoURL)
-                    .frame(height: 500)
-            } else {
-                Image(systemName: "figure.mixed.cardio")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 220)
-                    .foregroundColor(SuperhumanTheme.primaryColor)
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
+    private func changeExercise() {
+        if let newExercise = viewModel.getRandomExercise(for: currentExercise.bodyPart, excluding: currentExercise) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isLoading = true
             }
             
-            VStack(alignment: .leading, spacing: 12) {
-                // Title and Body Part
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(currentExercise.name)
-                        .font(.title2.bold())
-                    
-                    Text(currentExercise.bodyPart.rawValue)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+            // Add a slight delay to ensure loading state is visible
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    currentExercise = newExercise
+                    isLoading = false
                 }
-                
-                // Description
-                Text(currentExercise.description)
-                    .font(.body)
-                    .foregroundColor(.gray)
-                
-                // Quick Stats with difficulty badge
-                HStack(spacing: 20) {
-                    StatBadge(icon: "clock", text: "\(Int(currentExercise.duration/60)) min")
-                    StatBadge(icon: "repeat", text: "3 sets")
-                    
-                    // Difficulty Badge
-                    Text(currentExercise.difficulty.rawValue)
-                        .font(.caption.bold())
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(currentExercise.difficulty.color.opacity(0.2))
-                        .foregroundColor(currentExercise.difficulty.color)
-                        .cornerRadius(12)
-                }
-                .padding(.top, 4)
             }
-            .padding(.horizontal)
         }
     }
     
@@ -179,11 +171,64 @@ struct ExerciseDetailView: View {
         .animation(.easeInOut, value: selectedTab)
     }
     
-    private func changeExercise() {
-        if let newExercise = viewModel.getRandomExercise(for: currentExercise.bodyPart) {
-            withAnimation {
-                currentExercise = newExercise
+    private var exerciseHeader: some View {
+        VStack(spacing: 16) {
+            // Video Container
+            ZStack {
+                // Black background to prevent flashing
+                Color.black
+                    .frame(height: 500)
+                    .cornerRadius(15)
+                
+                if let videoURL = currentExercise.videoURL {
+                    EnhancedVideoPlayer(url: videoURL)
+                        .frame(height: 500)
+                        .cornerRadius(15)
+                        .opacity(isLoading ? 0 : 1)
+                } else {
+                    Image(systemName: "figure.mixed.cardio")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 220)
+                        .foregroundColor(SuperhumanTheme.primaryColor)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(15)
+                }
             }
+            
+            // Exercise Info
+            VStack(alignment: .leading, spacing: 12) {
+                Text(currentExercise.name)
+                    .font(.title2.bold())
+                    .id("\(currentExercise.id)_title")
+                
+                Text(currentExercise.bodyPart.rawValue)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .id("\(currentExercise.id)_bodypart")
+                
+                Text(currentExercise.description)
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .id("\(currentExercise.id)_desc")
+                
+                HStack(spacing: 20) {
+                    StatBadge(icon: "clock", text: "\(Int(currentExercise.duration/60)) min")
+                    StatBadge(icon: "repeat", text: "3 sets")
+                    
+                    Text(currentExercise.difficulty.rawValue)
+                        .font(.caption.bold())
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(currentExercise.difficulty.color.opacity(0.2))
+                        .foregroundColor(currentExercise.difficulty.color)
+                        .cornerRadius(12)
+                }
+                .padding(.top, 4)
+                .id("\(currentExercise.id)_stats")
+            }
+            .padding(.horizontal)
         }
     }
 }

@@ -28,7 +28,7 @@ struct ExerciseDatabase {
             description: "Circular movements to improve mobility",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_57da25050e11456dbe4b5166408364f3/480p/mp4/file.mp4"),
             steps: [
                 "Make a fist with both hands",
                 "Rotate wrists in clockwise circles for 30 seconds",
@@ -47,7 +47,7 @@ struct ExerciseDatabase {
             description: "Stretching exercise for wrist flexors",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_bda9618a011c401483b84758eef5a6b7/360p/mp4/file.mp4"),
             steps: [
                 "Place palms together in front of chest",
                 "Lower hands toward waist while keeping palms together",

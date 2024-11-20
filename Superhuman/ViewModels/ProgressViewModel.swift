@@ -59,7 +59,7 @@ class ProgressViewModel: ObservableObject {
         }
     }
     
-    private func loadCompletedExercises() {
+    func loadCompletedExercises() {
         completedExercises = UserDefaultsManager.shared.loadCompletedExercises()
         calculateProgress()
     }
@@ -70,6 +70,12 @@ class ProgressViewModel: ObservableObject {
             UserDefaultsManager.shared.saveCompletedExercise(exercise)
             calculateProgress()
         }
+    }
+    
+    func handleExerciseCompletion(_ exercise: Exercise) {
+        completedExercises.append(exercise)
+        UserDefaultsManager.shared.saveCompletedExercise(exercise)
+        calculateProgress()
     }
     
     private func calculateProgress() {
