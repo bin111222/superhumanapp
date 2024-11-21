@@ -124,15 +124,24 @@ struct DailyMovementView: View {
             }
         }
         
+        // Debug print
+        print("Completing exercise...")
+        
         // Post notification for progress tracking
         if let exercise = selectedExercise {
+            print("Posting notification for exercise: \(exercise.name)")
             NotificationCenter.default.post(
-                name: NSNotification.Name("ExerciseCompleted"),
+                name: Notification.Name("exerciseCompleted"), // Use exact string
                 object: exercise
             )
         }
         
-        selectedExercise = nil // This will dismiss the sheet
+        selectedExercise = nil
+        
+        // Save completed body parts
+        if let data = try? JSONEncoder().encode(Array(completedBodyParts)) {
+            UserDefaults.standard.set(data, forKey: "completedBodyParts")
+        }
     }
 }
 

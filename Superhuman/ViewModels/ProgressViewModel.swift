@@ -3,163 +3,235 @@ import Combine
 import UIKit
 
 class ProgressViewModel: ObservableObject {
-    // Stats Models
-    struct WeeklyStats {
-        var exercisesCompleted: Int = 0
-        var totalMinutes: Int = 0
-        var bodyPartsWorked: Set<BodyPart> = []
-        var dailyProgress: [Date: Double] = [:]
+    @Published var bodyPartProgress: [BodyPart: Double] = [:]
+    @Published var mentalWellnessProgress: [MentalWellnessType: Double] = [:]
+    @Published var selectedTimeFrame: TimeFrame = .week
+    @Published var consistencyScore: Double = 0
+    @Published var currentStreak: Int = 0
+    
+    private var progressData: ProgressData = .empty {
+        didSet {
+            saveProgress()
+            updateCalculatedMetrics()
+        }
     }
     
-    struct MonthlyStats {
-        var bestStreak: Int = 0
-        var totalExercises: Int = 0
-        var mostWorkedBodyPart: BodyPart?
-        var progressTrend: [Date: Double] = [:]
+    enum TimeFrame: String, CaseIterable {
+        case week = "Week"
+        case month = "Month"
     }
     
-    struct StreakInfo {
-        var currentStreak: Int = 0
-        var bestStreak: Int = 0
-        var lastCompletionDate: Date?
+    enum MentalWellnessType: String, CaseIterable {
+        case meditation = "Meditation"
+        case breathing = "Breathing"
+        case stressManagement = "Stress"
+        case sleep = "Sleep"
+        case mood = "Mood"
     }
-    
-    @Published var completedExercises: [Exercise] = []
-    @Published var timeUntilReset: String = ""
-    @Published var todayProgress: Double = 0.0
-    @Published var weeklyProgress: Double = 0.0
-    @Published var weeklyStats: WeeklyStats = WeeklyStats()
-    @Published var monthlyStats: MonthlyStats = MonthlyStats()
-    @Published var streakInfo: StreakInfo = StreakInfo()
-    private var timer: Timer?
-    
-    // Constants for goals
-    private let totalDailyGoal = BodyPart.allCases.count
-    private let totalWeeklyGoal = BodyPart.allCases.count * 7
     
     init() {
-        loadCompletedExercises()
-        startResetTimer()
-        calculateProgress()
+        loadProgress()
+        setupNotifications()
+    }
+    
+    private func setupNotifications() {
+        // Remove any existing observers first
+        NotificationCenter.default.removeObserver(self)
         
-        // Add notification observer for exercise completion
+        // Add observer with debug prints
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(exerciseCompleted),
-            name: NSNotification.Name("ExerciseCompleted"),
-            object: nil
+            forName: Notification.Name("exerciseCompleted"),
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            print("Received exercise completion notification")
+            if let exercise = notification.object as? Exercise {
+                print("Exercise received: \(exercise.name)")
+                self?.handleExerciseCompletion(exercise)
+            }
+        }
+    }
+    
+    private func handleExerciseCompletion(_ exercise: Exercise) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        // Check if we already logged an exercise today
+        let exercisesToday = progressData.exerciseHistory.filter {
+            calendar.isDate(calendar.startOfDay(for: $0.completionDate), inSameDayAs: today)
+        }
+        
+        // Only add to history if it's a new exercise for today
+        let progress = ExerciseProgress(
+            exerciseId: exercise.name,
+            bodyPart: exercise.bodyPart,
+            completionDate: Date(),
+            duration: exercise.duration
         )
+        
+        progressData.exerciseHistory.append(progress)
+        progressData.totalExercises += 1
+        
+        // Update streak only once per day
+        if exercisesToday.isEmpty {
+            updateStreak()
+        }
+        
+        // Update progress
+        updateBodyPartProgress()
+        
+        // Save changes
+        saveProgress()
+        
+        // Force UI update
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+        }
     }
     
-    func hasExercises(on date: Date) -> Bool {
+    @objc private func mentalWellnessCompleted(_ notification: Notification) {
+        if let category = notification.userInfo?["category"] as? String {
+            let type = getMentalWellnessType(from: category)
+            let currentProgress = mentalWellnessProgress[type] ?? 0
+            mentalWellnessProgress[type] = min(1.0, currentProgress + 0.2) // Increment by 20%
+            saveProgress()
+        }
+    }
+    
+    private func getMentalWellnessType(from category: String) -> MentalWellnessType {
+        switch category {
+        case "Meditation":
+            return .meditation
+        case "Breathing":
+            return .breathing
+        case "Stress Management":
+            return .stressManagement
+        case "Sleep":
+            return .sleep
+        default:
+            return .mood
+        }
+    }
+    
+    private func updateStreak() {
         let calendar = Calendar.current
-        return completedExercises.contains { exercise in
-            guard let completionDate = exercise.completionDate else { return false }
-            return calendar.isDate(date, inSameDayAs: completionDate)
-        }
-    }
-    
-    func loadCompletedExercises() {
-        completedExercises = UserDefaultsManager.shared.loadCompletedExercises()
-        calculateProgress()
-    }
-    
-    @objc private func exerciseCompleted(notification: Notification) {
-        if let exercise = notification.object as? Exercise {
-            completedExercises.append(exercise)
-            UserDefaultsManager.shared.saveCompletedExercise(exercise)
-            calculateProgress()
-        }
-    }
-    
-    func handleExerciseCompletion(_ exercise: Exercise) {
-        completedExercises.append(exercise)
-        UserDefaultsManager.shared.saveCompletedExercise(exercise)
-        calculateProgress()
-    }
-    
-    private func calculateProgress() {
-        // Calculate today's progress (out of total body parts)
-        let todayExercises = completedExercises.filter { exercise in
-            Calendar.current.isDateInToday(exercise.completionDate ?? Date())
-        }
+        let today = calendar.startOfDay(for: Date())
         
-        // Count unique body parts completed today
-        let uniqueBodyPartsToday = Set(todayExercises.map { $0.bodyPart })
-        todayProgress = Double(uniqueBodyPartsToday.count) / Double(totalDailyGoal)
-        
-        // Calculate weekly progress (out of body parts * 7 days)
-        let calendar = Calendar.current
-        let weekStart = calendar.startOfWeek(for: Date())
-        let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart)!
-        
-        let weekExercises = completedExercises.filter { exercise in
-            guard let date = exercise.completionDate else { return false }
-            return date >= weekStart && date < weekEnd
-        }
-        
-        // Count total completed exercises this week
-        weeklyProgress = Double(weekExercises.count) / Double(totalWeeklyGoal)
-    }
-    
-    private func startResetTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.updateTimeUntilReset()
-        }
-    }
-    
-    private func updateTimeUntilReset() {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        // Find next Monday at midnight
-        var components = DateComponents()
-        components.weekday = 2 // Monday
-        components.hour = 0
-        components.minute = 0
-        components.second = 0
-        
-        guard let nextReset = calendar.nextDate(after: now,
-                                              matching: components,
-                                              matchingPolicy: .nextTime) else {
+        // Only update streak once per day
+        guard let lastDate = progressData.lastExerciseDate else {
+            progressData.currentStreak = 1
+            progressData.lastExerciseDate = today
+            currentStreak = 1
             return
         }
         
-        let difference = calendar.dateComponents([.day, .hour, .minute, .second], from: now, to: nextReset)
+        let lastExerciseDay = calendar.startOfDay(for: lastDate)
         
-        timeUntilReset = String(format: "%dd %02dh %02dm",
-                               difference.day ?? 0,
-                               difference.hour ?? 0,
-                               difference.minute ?? 0)
+        // If already logged today, don't update streak
+        if calendar.isDate(lastExerciseDay, inSameDayAs: today) {
+            return
+        }
+        
+        let daysBetween = calendar.dateComponents([.day], from: lastExerciseDay, to: today).day ?? 0
+        
+        if daysBetween == 1 {
+            // Next consecutive day
+            progressData.currentStreak += 1
+        } else if daysBetween > 1 {
+            // Streak broken
+            progressData.currentStreak = 1
+        }
+        // else daysBetween == 0, same day, don't update streak
+        
+        progressData.lastExerciseDate = today
+        currentStreak = progressData.currentStreak
     }
     
-    deinit {
-        timer?.invalidate()
+    private func updateCalculatedMetrics() {
+        updateBodyPartProgress()
+        updateConsistencyScore()
     }
     
-    func updateStats() {
-        calculateWeeklyStats()
-        calculateMonthlyStats()
-        updateStreakInfo()
+    private func updateBodyPartProgress() {
+        let timeFrame = getTimeFrameDates()
+        let calendar = Calendar.current
+        let now = Date()
+        
+        // Get all exercises within the time frame
+        let recentExercises = progressData.exerciseHistory.filter { 
+            $0.completionDate >= timeFrame.start && $0.completionDate <= timeFrame.end 
+        }
+        
+        // Group exercises by date (to count days where exercises were done)
+        let exerciseDates = Set(recentExercises.map { 
+            calendar.startOfDay(for: $0.completionDate)
+        })
+        
+        // Calculate total possible days
+        let totalDays: Double
+        switch selectedTimeFrame {
+        case .week:
+            totalDays = 7
+        case .month:
+            totalDays = 30
+        }
+        
+        // Calculate progress based on days completed
+        let completedDays = Double(exerciseDates.count)
+        let progress = completedDays / totalDays
+        
+        // Update progress for each body part
+        BodyPart.allCases.forEach { bodyPart in
+            bodyPartProgress[bodyPart] = min(1.0, progress)
+        }
     }
     
-    private func calculateWeeklyStats() {
-        // Implementation for weekly statistics
+    private func updateConsistencyScore() {
+        let timeFrame = getTimeFrameDates()
+        let calendar = Calendar.current
+        let totalDays = calendar.dateComponents([.day], from: timeFrame.start, to: timeFrame.end).day ?? 1
+        
+        let exerciseDays = Set(progressData.exerciseHistory
+            .filter { $0.completionDate >= timeFrame.start && $0.completionDate <= timeFrame.end }
+            .map { calendar.startOfDay(for: $0.completionDate) }
+        ).count
+        
+        consistencyScore = Double(exerciseDays) / Double(totalDays)
     }
     
-    private func calculateMonthlyStats() {
-        // Implementation for monthly statistics
+    private func getTimeFrameDates() -> (start: Date, end: Date) {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let start: Date
+        switch selectedTimeFrame {
+        case .week:
+            start = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        case .month:
+            start = calendar.date(byAdding: .month, value: -1, to: now) ?? now
+        }
+        
+        return (start: start, end: now)
     }
     
-    private func updateStreakInfo() {
-        // Implementation for streak tracking
+    private func saveProgress() {
+        if let encoded = try? JSONEncoder().encode(progressData) {
+            UserDefaults.standard.set(encoded, forKey: "exerciseProgress")
+        }
+        UserDefaults.standard.set(mentalWellnessProgress, forKey: "mentalWellnessProgress")
     }
-}
-
-// Helper extension for Calendar
-extension Calendar {
-    func startOfWeek(for date: Date) -> Date {
-        let components = self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-        return self.date(from: components)!
+    
+    func loadProgress() {
+        if let savedData = UserDefaults.standard.data(forKey: "exerciseProgress"),
+           let decoded = try? JSONDecoder().decode(ProgressData.self, from: savedData) {
+            progressData = decoded
+            updateCalculatedMetrics()
+        }
+        
+        if let savedMentalProgress = UserDefaults.standard.dictionary(forKey: "mentalWellnessProgress") as? [String: Double] {
+            MentalWellnessType.allCases.forEach { type in
+                mentalWellnessProgress[type] = savedMentalProgress[type.rawValue] ?? 0
+            }
+        }
     }
 } 

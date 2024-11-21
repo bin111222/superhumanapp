@@ -1,248 +1,187 @@
 import SwiftUI
 import Charts
 
+struct TimeFramePicker: View {
+    @Binding var selection: ProgressViewModel.TimeFrame
+    
+    var body: some View {
+        Picker("Time Frame", selection: $selection) {
+            ForEach(ProgressViewModel.TimeFrame.allCases, id: \.self) { timeFrame in
+                Text(timeFrame.rawValue)
+                    .tag(timeFrame)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal)
+    }
+}
+
 struct ProgressView: View {
     @StateObject private var viewModel = ProgressViewModel()
     
-    // Get current week dates
-    private let weekDates: [Date] = {
-        let calendar = Calendar.current
-        let today = Date()
-        let weekday = calendar.component(.weekday, from: today)
-        let weekStart = calendar.date(byAdding: .day, value: 2-weekday, to: today)!
-        return (0..<7).map { day in
-            calendar.date(byAdding: .day, value: day, to: weekStart)!
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                // Time Frame Selector
+                TimeFramePicker(selection: $viewModel.selectedTimeFrame)
+                
+                // Stats Overview
+                StatsOverview(
+                    consistencyScore: viewModel.consistencyScore,
+                    currentStreak: viewModel.currentStreak
+                )
+                
+                // Physical Progress Section
+                PhysicalProgressSection(progress: viewModel.bodyPartProgress)
+                
+                // Mental Wellness Progress
+                MentalWellnessProgressSection(progress: viewModel.mentalWellnessProgress)
+            }
+            .padding()
         }
-    }()
+        .navigationTitle("Progress")
+        .background(Color.black)
+    }
+}
+
+struct StatsOverview: View {
+    let consistencyScore: Double
+    let currentStreak: Int
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Weekly Progress Header
-                    weeklyProgressHeader
-                    
-                    // Calendar Week View
-                    weekCalendarView
-                    
-                    // Completed Exercises Grid
-                    if !viewModel.completedExercises.isEmpty {
-                        completedExercisesGrid
-                    } else {
-                        emptyStateView
-                    }
-                }
-                .padding()
-            }
-            .navigationTitle("This Week")
+        HStack(spacing: 16) {
+            StatCard(
+                title: "Consistency",
+                value: "\(Int(consistencyScore * 100))%",
+                icon: "chart.line.uptrend.xyaxis"
+            )
+            
+            StatCard(
+                title: "Streak",
+                value: "\(currentStreak) days",
+                icon: "flame.fill"
+            )
         }
-        .onAppear {
-            // Load data when view appears
-            viewModel.loadCompletedExercises()
-        }
-        // Add notification observer for exercise completion
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ExerciseCompleted"))) { notification in
-            if let exercise = notification.object as? Exercise {
-                withAnimation(.easeInOut) {
-                    viewModel.handleExerciseCompletion(exercise)
-                }
-            }
-        }
+        .padding(.horizontal)
     }
+}
+
+struct StatCard: View {
+    let title: String
+    let value: String
+    let icon: String
     
-    private var weeklyProgressHeader: some View {
-        VStack(spacing: 16) {
-            // Today's Progress
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Today's Progress")
-                        .font(.headline)
-                    Spacer()
-                    Text("\(Int(viewModel.todayProgress * 100))%")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                
-                ProgressBar(progress: viewModel.todayProgress, color: .green)
-                    .frame(height: 8)
-            }
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(SuperhumanTheme.primaryColor)
             
-            // Weekly Progress
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Weekly Progress")
-                        .font(.headline)
-                    Spacer()
-                    Text("\(Int(viewModel.weeklyProgress * 100))%")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                
-                ProgressBar(progress: viewModel.weeklyProgress, color: .blue)
-                    .frame(height: 8)
-            }
+            Text(value)
+                .font(.headline)
+                .bold()
             
-            // Reset Timer
-            Text("Resets in \(viewModel.timeUntilReset)")
+            Text(title)
                 .font(.caption)
                 .foregroundColor(.gray)
         }
+        .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.white.opacity(0.05))
-        .cornerRadius(20)
+        .background(Color.black.opacity(0.3))
+        .cornerRadius(15)
     }
+}
+
+struct PhysicalProgressSection: View {
+    let progress: [BodyPart: Double]
     
-    private var weekCalendarView: some View {
-        HStack(spacing: 8) {
-            ForEach(weekDates, id: \.self) { date in
-                let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
-                let hasExercises = viewModel.hasExercises(on: date)
-                
-                VStack(spacing: 8) {
-                    Text(date.formatted(.dateTime.weekday(.narrow)))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    Text(date.formatted(.dateTime.day()))
-                        .font(.system(.body, design: .rounded))
-                        .foregroundColor(isToday ? .white : .gray)
-                    
-                    Circle()
-                        .fill(hasExercises ? gradientForDate(date) : Color.clear)
-                        .frame(width: 6, height: 6)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(isToday ? Color.white.opacity(0.1) : Color.clear)
-                )
-            }
-        }
-    }
-    
-    private var completedExercisesGrid: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Completed Exercises")
-                .font(.headline)
+            Text("Physical Progress")
+                .font(.title2.bold())
+                .foregroundColor(SuperhumanTheme.primaryColor)
             
             LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 16) {
-                ForEach(viewModel.completedExercises) { exercise in
-                    CompletedExerciseCard(exercise: exercise)
+                GridItem(.adaptive(minimum: 80))
+            ], spacing: 20) {
+                ForEach(BodyPart.allCases, id: \.self) { bodyPart in
+                    ProgressRing(
+                        progress: progress[bodyPart] ?? 0,
+                        label: bodyPart.rawValue,
+                        color: SuperhumanTheme.primaryColor,
+                        size: 80
+                    )
                 }
             }
         }
-    }
-    
-    private var emptyStateView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "figure.run.circle")
-                .font(.system(size: 60))
-                .foregroundColor(.gray)
-            
-            Text("No exercises completed yet this week")
-                .font(.headline)
-                .foregroundColor(.gray)
-            
-            Text("Complete your first exercise to start tracking progress!")
-                .font(.subheadline)
-                .foregroundColor(.gray.opacity(0.8))
-                .multilineTextAlignment(.center)
-        }
-        .padding(.top, 40)
-    }
-    
-    private func gradientForDate(_ date: Date) -> Color {
-        let colors: [Color] = [.blue, .purple, .pink]
-        let dayOfWeek = Calendar.current.component(.weekday, from: date) - 1
-        let colorIndex = dayOfWeek % colors.count
-        return colors[colorIndex]
+        .padding()
+        .background(Color.black.opacity(0.3))
+        .cornerRadius(15)
     }
 }
 
-struct CompletedExerciseCard: View {
-    let exercise: Exercise
+struct MentalWellnessProgressSection: View {
+    let progress: [ProgressViewModel.MentalWellnessType: Double]
+    private let mentalWellnessColor = Color.blue
     
     var body: some View {
-        VStack(spacing: 12) {
-            // Icon
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                colorForBodyPart(exercise.bodyPart),
-                                colorForBodyPart(exercise.bodyPart).opacity(0.6)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 50, height: 50)
-                
-                Image(systemName: iconForBodyPart(exercise.bodyPart))
-                    .font(.system(size: 24))
-                    .foregroundColor(.white)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Mental Wellness")
+                .font(.title2.bold())
+                .foregroundColor(mentalWellnessColor)
             
-            Text(exercise.bodyPart.rawValue)
-                .font(.caption)
-                .foregroundColor(.gray)
-                .lineLimit(1)
+            LazyVGrid(columns: [
+                GridItem(.adaptive(minimum: 80))
+            ], spacing: 20) {
+                ForEach(ProgressViewModel.MentalWellnessType.allCases, id: \.self) { type in
+                    ProgressRing(
+                        progress: progress[type] ?? 0,
+                        label: type.rawValue,
+                        color: mentalWellnessColor,
+                        size: 80
+                    )
+                }
+            }
         }
         .padding()
-        .background(Color.white.opacity(0.05))
-        .cornerRadius(16)
-    }
-    
-    private func colorForBodyPart(_ bodyPart: BodyPart) -> Color {
-        switch bodyPart {
-        case .wrists: return .blue
-        case .neck: return .purple
-        case .genitals: return .pink
-        case .ankles: return .green
-        case .lowerBack: return .orange
-        case .jaw: return .red
-        case .hips: return .yellow
-        case .shoulders: return .mint
-        case .eyes: return .indigo
-        }
-    }
-    
-    private func iconForBodyPart(_ bodyPart: BodyPart) -> String {
-        switch bodyPart {
-        case .wrists: return "hand.raised.fill"
-        case .neck: return "person.bust.fill"
-        case .genitals: return "figure.walk.motion"
-        case .ankles: return "figure.walk.circle.fill"
-        case .lowerBack: return "figure.walk.arrival.fill"
-        case .jaw: return "mouth.fill"
-        case .hips: return "figure.dance"
-        case .shoulders: return "figure.arms.open"
-        case .eyes: return "eye.fill"
-        }
+        .background(Color.black.opacity(0.3))
+        .cornerRadius(15)
     }
 }
 
-struct ProgressBar: View {
+struct ProgressRing: View {
     let progress: Double
+    let label: String
     let color: Color
+    let size: CGFloat
+    @State private var animatedProgress: Double = 0
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.2))
-                    .cornerRadius(4)
+        VStack {
+            ZStack {
+                Circle()
+                    .stroke(color.opacity(0.2), lineWidth: 4)
                 
-                Rectangle()
-                    .fill(color)
-                    .cornerRadius(4)
-                    .frame(width: geometry.size.width * min(max(progress, 0), 1))
+                Circle()
+                    .trim(from: 0, to: animatedProgress)
+                    .stroke(color, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                
+                Text("\(Int(progress * 100))%")
+                    .font(.caption2.bold())
+                    .foregroundColor(color)
+            }
+            .frame(width: size * 0.7, height: size * 0.7)
+            
+            Text(label)
+                .font(.caption2)
+                .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.0)) {
+                animatedProgress = progress
             }
         }
     }
