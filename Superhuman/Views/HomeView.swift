@@ -98,6 +98,11 @@ struct HomeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
         }
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name.userProfileDidUpdate)) { _ in
+            if let profile = UserDefaultsManager.shared.loadUserProfile() {
+                userName = profile.name
+            }
+        }
     }
 }
 

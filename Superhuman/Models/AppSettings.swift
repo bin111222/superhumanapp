@@ -15,6 +15,9 @@ class AppSettings: ObservableObject {
         }
     }
     
+    @Published var isLoading = true
+    @Published var hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+    
     init() {
         self.isDarkModeEnabled = UserDefaults.standard.bool(forKey: "isDarkModeEnabled")
         if let savedBodyPart = UserDefaults.standard.string(forKey: "selectedBodyPart"),
@@ -23,5 +26,11 @@ class AppSettings: ObservableObject {
         } else {
             self.selectedBodyPart = nil
         }
+    }
+    
+    func reset() {
+        hasCompletedOnboarding = false
+        UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
+        UserDefaults.standard.synchronize()
     }
 } 

@@ -1,7 +1,6 @@
 //
 //  ContentView.swift
 //  Superhuman
-//
 //  Created by varil shah on 19/11/24.
 //
 
@@ -36,6 +35,10 @@ struct ContentView: View {
                         }
                     }
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .signOut)) { _ in
+            hasCompletedOnboarding = false
+            showProfile = false
         }
     }
 }
