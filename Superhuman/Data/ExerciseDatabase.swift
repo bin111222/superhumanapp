@@ -9,7 +9,7 @@ struct ExerciseDatabase {
             description: "Gentle stretch targeting the inner forearm muscles",
             difficulty: .beginner,
             duration: 300,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_0627342c01824d5399705232f84c487d/1080p/mp4/file.mp4"),
             steps: [
                 "Extend your arm forward with palm facing up",
                 "Use other hand to gently pull fingers down and back",
@@ -28,7 +28,7 @@ struct ExerciseDatabase {
             description: "Circular movements to improve mobility",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_57da25050e11456dbe4b5166408364f3/480p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cc3ff7a6e7c34fe4a5f7094965ee6485/480p/mp4/file.mp4"),
             steps: [
                 "Make a fist with both hands",
                 "Rotate wrists in clockwise circles for 30 seconds",
@@ -47,7 +47,7 @@ struct ExerciseDatabase {
             description: "Stretching exercise for wrist flexors",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_bda9618a011c401483b84758eef5a6b7/360p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_8d221362964e4487a67308185b98ccd1/360p/mp4/file.mp4"),
             steps: [
                 "Place palms together in front of chest",
                 "Lower hands toward waist while keeping palms together",
@@ -66,7 +66,7 @@ struct ExerciseDatabase {
             description: "Advanced stretch for wrist extensors",
             difficulty: .intermediate,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_c4552a5ba7ad4b30a20f025d311996d1/480p/mp4/file.mp4"),
             steps: [
                 "Place backs of hands together at lower back",
                 "Raise hands up gently to feel stretch",
@@ -85,7 +85,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for wrist extensors",
             difficulty: .intermediate,
             duration: 240,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_531714b92f644ccc826e9868fe638062/480p/mp4/file.mp4"),
             steps: [
                 "Hold arm straight with palm facing down",
                 "Lift hand upward, bending at wrist",
@@ -104,7 +104,7 @@ struct ExerciseDatabase {
             description: "Side-to-side wrist movements",
             difficulty: .intermediate,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_1bdaf309609840e79911df21a2429eca/480p/mp4/file.mp4"),
             steps: [
                 "Rest forearm on table with hand over edge",
                 "Move wrist side to side",
@@ -124,7 +124,7 @@ struct ExerciseDatabase {
             description: "Rotation exercise for forearm and wrist mobility",
             difficulty: .intermediate,
             duration: 240,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_33dc77db43a944749f714e8448b87ca3/480p/mp4/file.mp4"),
             steps: [
                 "Hold arm out straight with palm down",
                 "Rotate forearm to turn palm up",
@@ -144,7 +144,7 @@ struct ExerciseDatabase {
             description: "Strengthening exercise for grip and wrist muscles",
             difficulty: .beginner,
             duration: 180,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_58b5e052973c4cc4a482b2cfe3f71f12/480p/mp4/file.mp4"),
             steps: [
                 "Hold a tennis ball in hand",
                 "Squeeze ball firmly",
@@ -1383,7 +1383,7 @@ struct ExerciseDatabase {
             description: "Advanced grip and forearm strength challenge",
             difficulty: .advanced,
             duration: 480,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_91eaad7228a4430c8c1d95b0aa5350e5/360p/mp4/file.mp4"),
             steps: [
                 "Use a weighted wrist roller with 10-15 lbs",
                 "Roll weight up using only wrist movement",
@@ -1404,7 +1404,7 @@ struct ExerciseDatabase {
             description: "Advanced isometric wrist strengthening",
             difficulty: .advanced,
             duration: 600,
-            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_cd839a512226406d971c5199a2ab56bb/1080p/mp4/file.mp4"),
+            videoURL: URL(string: "https://video.wixstatic.com/video/1231c0_78a041ef9cf64a28968bc85dd1eeca75/360p/mp4/file.mp4"),
             steps: [
                 "Start in push-up position with fingers pointing backward",
                 "Shift weight forward, maintaining straight arms",

@@ -41,6 +41,10 @@ struct ExerciseDetailView: View {
     @State private var isBookmarked = false
     @State private var isLoading = false
     @State private var videoKey = UUID()
+    @State private var animationRotation: Double = 0
+    @State private var pulseScale: CGFloat = 1
+    @State private var pulseOpacity: Double = 1
+    @State private var messageOpacity: Double = 0
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = ExercisesViewModel()
     @State private var currentExercise: Exercise
@@ -54,9 +58,7 @@ struct ExerciseDetailView: View {
     }
     
     var body: some View {
-        // Wrap everything in a ZStack for proper layering
         ZStack {
-            // Main content
             ScrollView {
                 VStack(spacing: 24) {
                     exerciseHeader
@@ -92,22 +94,52 @@ struct ExerciseDetailView: View {
                     }
                 }
             }
-            
-            // Full screen loading overlay
-            if isLoading {
-                Color.black
-                    .opacity(1)
-                    .edgesIgnoringSafeArea(.all)
-                    .overlay(
-                        Text("Loading new exercise...")
-                            .foregroundColor(.white)
-                            .font(.headline)
-                    )
-                    .transition(.opacity)
+            .sheet(isPresented: $showingTimer) {
+                ExerciseTimerView(duration: currentExercise.duration)
             }
-        }
-        .sheet(isPresented: $showingTimer) {
-            ExerciseTimerView(duration: currentExercise.duration)
+            
+            // Loading Overlay
+            if isLoading {
+                ZStack {
+                    // Black background
+                    Color.black
+                        .opacity(0.9)
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    VStack {
+                        // Spinning Ring Animation
+                        ZStack {
+                            ForEach(0..<12, id: \.self) { index in
+                                Circle()
+                                    .fill(SuperhumanTheme.primaryColor)
+                                    .frame(width: 10, height: 10)
+                                    .offset(y: -50)
+                                    .rotationEffect(.degrees(Double(index) * 30))
+                                    .rotationEffect(.degrees(animationRotation))
+                            }
+                        }
+                        .frame(width: 120, height: 120)
+                        .animation(
+                            .linear(duration: 2).repeatForever(autoreverses: false),
+                            value: animationRotation
+                        )
+                        .onAppear {
+                            animationRotation += 360
+                        }
+                        
+                       
+                    }
+                }
+                .transition(.opacity)
+                .onDisappear {
+                    // Reset animation states when hiding
+                    animationRotation = 0
+                    pulseScale = 1
+                    pulseOpacity = 1
+                    messageOpacity = 0
+                }
+                .zIndex(999) // Ensure loading overlay is on top
+            }
         }
     }
     
@@ -118,10 +150,18 @@ struct ExerciseDetailView: View {
             }
             
             // Add a slight delay to ensure loading state is visible
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 withAnimation(.easeInOut(duration: 0.3)) {
-                    videoKey = UUID()
+                    // Force cleanup of current video
+                    if let videoURL = currentExercise.videoURL {
+                        NotificationCenter.default.post(
+                            name: NSNotification.Name("CleanupVideo"),
+                            object: nil
+                        )
+                    }
+                    
                     currentExercise = newExercise
+                    videoKey = UUID() // Force video view to recreate
                     isLoading = false
                 }
             }
@@ -174,7 +214,7 @@ struct ExerciseDetailView: View {
                     .cornerRadius(15)
                 
                 if let videoURL = currentExercise.videoURL {
-                    EnhancedVideoPlayer(url: videoURL)
+                    VideoPlayerView(url: videoURL)
                         .frame(height: 500)
                         .cornerRadius(15)
                         .opacity(isLoading ? 0 : 1)
@@ -475,6 +515,194 @@ struct WaveShape: Shape {
         path.closeSubpath()
         
         return path
+    }
+}
+
+// Rename to ExerciseVideoPlayerViewModel
+class ExerciseVideoPlayerViewModel: ObservableObject {
+    @Published var isPlaying = true
+    @Published var isMuted = false
+    @Published var isFullscreen = false
+    @Published var showControls = false
+    
+    let player = AVPlayer()
+    private var timeObserver: Any?
+    private var controlsTimer: Timer?
+    
+    func setupPlayer(with url: URL) {
+        cleanup()
+        
+        let item = AVPlayerItem(url: url)
+        player.replaceCurrentItem(with: item)
+        
+        // Configure initial state
+        player.isMuted = isMuted
+        
+        // Setup video looping
+        NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem,
+            queue: .main
+        ) { [weak self] _ in
+            self?.player.seek(to: .zero)
+            self?.player.play()
+        }
+        
+        player.play()
+    }
+    
+    func cleanup() {
+        player.pause()
+        player.replaceCurrentItem(with: nil)
+        controlsTimer?.invalidate()
+        if let observer = timeObserver {
+            player.removeTimeObserver(observer)
+        }
+        
+        // Remove notification observers
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func togglePlayback() {
+        isPlaying.toggle()
+        if isPlaying {
+            player.play()
+        } else {
+            player.pause()
+        }
+        resetControlsTimer()
+    }
+    
+    func toggleMute() {
+        isMuted.toggle()
+        player.isMuted = isMuted
+        resetControlsTimer()
+    }
+    
+    func toggleFullscreen() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            isFullscreen.toggle()
+        }
+        resetControlsTimer()
+    }
+    
+    func toggleControls() {
+        withAnimation {
+            showControls.toggle()
+            if showControls {
+                resetControlsTimer()
+            }
+        }
+    }
+    
+    private func resetControlsTimer() {
+        controlsTimer?.invalidate()
+        controlsTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
+            withAnimation {
+                self?.showControls = false
+            }
+        }
+    }
+}
+
+// Update VideoPlayerView to use the new view model name
+struct VideoPlayerView: View {
+    let url: URL
+    @StateObject private var viewModel = ExerciseVideoPlayerViewModel()
+    @Environment(\.presentationMode) var presentationMode
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                // Video Layer
+                AVPlayerControllerRepresentable(player: viewModel.player)
+                    .frame(
+                        width: geometry.size.width,
+                        height: viewModel.isFullscreen ? UIScreen.main.bounds.height : 500
+                    )
+                    .animation(.easeInOut, value: viewModel.isFullscreen)
+                    .onAppear {
+                        viewModel.setupPlayer(with: url)
+                    }
+                    .onDisappear {
+                        viewModel.cleanup()
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("CleanupVideo"))) { _ in
+                        viewModel.cleanup()
+                    }
+                
+                // Custom Controls Overlay
+                if viewModel.showControls {
+                    Color.black.opacity(0.3)
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    HStack(spacing: 50) {
+                        // Play/Pause
+                        Button {
+                            viewModel.togglePlayback()
+                        } label: {
+                            Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.white)
+                        }
+                        
+                        // Mute/Unmute
+                        Button {
+                            viewModel.toggleMute()
+                        } label: {
+                            Image(systemName: viewModel.isMuted ? "speaker.slash.circle.fill" : "speaker.wave.2.circle.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.white)
+                        }
+                        
+                        // Fullscreen
+                        Button {
+                            viewModel.toggleFullscreen()
+                        } label: {
+                            Image(systemName: viewModel.isFullscreen ? "arrow.down.left.and.arrow.down.right.circle.fill" : "arrow.up.right.and.arrow.up.left.circle.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.white)
+                        }
+                    }
+                }
+            }
+            .frame(
+                width: geometry.size.width,
+                height: viewModel.isFullscreen ? UIScreen.main.bounds.height : 500
+            )
+            .position(
+                x: geometry.size.width / 2,
+                y: viewModel.isFullscreen ? UIScreen.main.bounds.height / 2 : 250
+            )
+        }
+        .edgesIgnoringSafeArea(viewModel.isFullscreen ? .all : [])
+        .onTapGesture {
+            viewModel.toggleControls()
+        }
+    }
+}
+
+// AVPlayer View Representative
+struct AVPlayerControllerRepresentable: UIViewControllerRepresentable {
+    let player: AVPlayer
+    
+    func makeUIViewController(context: Context) -> AVPlayerViewController {
+        let controller = AVPlayerViewController()
+        controller.player = player
+        controller.showsPlaybackControls = false
+        
+        // Configure player
+        player.allowsExternalPlayback = false
+        player.automaticallyWaitsToMinimizeStalling = false
+        
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {
+        uiViewController.player = player
     }
 }
 

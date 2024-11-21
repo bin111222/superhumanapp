@@ -7,7 +7,7 @@ struct TabBarView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                HomeView()
+                HomeView(selectedTab: $selectedTab)
                     .tabItem {
                         Label("Home", systemImage: "house.fill")
                     }

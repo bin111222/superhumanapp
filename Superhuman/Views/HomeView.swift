@@ -7,24 +7,48 @@ struct HomeView: View {
     @State private var currentQuote = Quote.quotes.randomElement()!
     @State private var isRotating = false
     @State private var isChanging = false
+    @Binding var selectedTab: Int
+    @State private var isAnimating = false
     
     var body: some View {
         NavigationView {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 32) {
-
-                      // Welcome Header
-                    Text("Hey, \(userName)! Let's get going? It's time to ")
-                        .font(.system(.title2, design: .rounded))
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                        .padding(.top, 16)
-                
+                    // Welcome Header
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Hey, \(userName.capitalized)!")
+                            .font(.system(.title2, design: .rounded))
+                            .fontWeight(.bold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        AnimatedText(text: "Tomorrow's Growth, Starts Today")
+                            .font(.system(.title3, design: .rounded))
+                            .fontWeight(.semibold)
+                            .foregroundColor(SuperhumanTheme.primaryColor)
+                        
+                        Text("Let's get going!")
+                            .font(.system(.title3, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(SuperhumanTheme.primaryColor)
+                            .scaleEffect(isAnimating ? 1.1 : 1.0)
+                            .animation(
+                                Animation.easeInOut(duration: 5.0)
+                                    .repeatForever(autoreverses: true),
+                                value: isAnimating
+                            )
+                            .onAppear {
+                                isAnimating = true
+                            }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 16)
+                    
                     // Bento Box Grid
                     LazyVGrid(columns: [GridItem(.flexible())], spacing: 24) {
                         // Physical Exercise Box
-                        NavigationLink(destination: DailyMovementView()) {
+                        Button {
+                            selectedTab = 1 // Switch to Dailies tab
+                        } label: {
                             BentoBox(
                                 title: "Physical Exercise",
                                 description: "Daily movement challenges for body maintenance and strength",
@@ -34,7 +58,9 @@ struct HomeView: View {
                         }
                         
                         // Mental Wellness Box
-                        NavigationLink(destination: MentalWellnessView()) {
+                        Button {
+                            selectedTab = 3 // Switch to Mind tab
+                        } label: {
                             BentoBox(
                                 title: "Mental Wellness",
                                 description: "Meditation, breathing exercises, and mindfulness practices",
@@ -72,6 +98,25 @@ struct HomeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+}
+
+struct AnimatedText: View {
+    let text: String
+    @State private var isAnimating = false
+    
+    var body: some View {
+        Text(text)
+            .opacity(isAnimating ? 1 : 0.7)
+            .scaleEffect(isAnimating ? 1.05 : 1)
+            .animation(
+                Animation.easeInOut(duration: 1.5)
+                    .repeatForever(autoreverses: true),
+                value: isAnimating
+            )
+            .onAppear {
+                isAnimating = true
+            }
     }
 }
 
@@ -174,7 +219,7 @@ struct BentoBox: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(selectedTab: .constant(0))
         .environmentObject(AppSettings())
         .preferredColorScheme(.dark)
 } 
