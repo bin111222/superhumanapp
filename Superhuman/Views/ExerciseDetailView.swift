@@ -622,6 +622,13 @@ struct VideoPlayerView: View {
                     )
                     .animation(.easeInOut, value: viewModel.isFullscreen)
                     .onAppear {
+                        // Configure audio session
+                        do {
+                            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                            try AVAudioSession.sharedInstance().setActive(true)
+                        } catch {
+                            print("Failed to set audio session category: \(error)")
+                        }
                         viewModel.setupPlayer(with: url)
                     }
                     .onDisappear {
@@ -685,7 +692,7 @@ struct VideoPlayerView: View {
     }
 }
 
-// AVPlayer View Representative
+// Update AVPlayerControllerRepresentable
 struct AVPlayerControllerRepresentable: UIViewControllerRepresentable {
     let player: AVPlayer
     
@@ -697,6 +704,9 @@ struct AVPlayerControllerRepresentable: UIViewControllerRepresentable {
         // Configure player
         player.allowsExternalPlayback = false
         player.automaticallyWaitsToMinimizeStalling = false
+        
+        // Set audio volume to full
+        player.volume = 1.0
         
         return controller
     }
