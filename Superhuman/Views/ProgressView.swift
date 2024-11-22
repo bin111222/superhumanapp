@@ -1,30 +1,12 @@
 import SwiftUI
 import Charts
 
-struct TimeFramePicker: View {
-    @Binding var selection: ProgressViewModel.TimeFrame
-    
-    var body: some View {
-        Picker("Time Frame", selection: $selection) {
-            ForEach(ProgressViewModel.TimeFrame.allCases, id: \.self) { timeFrame in
-                Text(timeFrame.rawValue)
-                    .tag(timeFrame)
-            }
-        }
-        .pickerStyle(.segmented)
-        .padding(.horizontal)
-    }
-}
-
 struct ProgressView: View {
     @StateObject private var viewModel = ProgressViewModel()
     
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Time Frame Selector
-                TimeFramePicker(selection: $viewModel.selectedTimeFrame)
-                
                 // Stats Overview
                 StatsOverview(
                     consistencyScore: viewModel.consistencyScore,

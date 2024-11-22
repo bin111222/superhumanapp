@@ -5,7 +5,15 @@ struct DailyMovementView: View {
     @State private var selectedBodyPart: BodyPart?
     @State private var showingExerciseDetail = false
     @State private var selectedExercise: Exercise?
-    @State private var completedBodyParts: Set<BodyPart> = []
+    @State private var completedBodyParts: Set<BodyPart> = [] {
+        didSet {
+            // Save to UserDefaults when the set changes
+            if let encoded = try? JSONEncoder().encode(completedBodyParts) {
+                UserDefaults.standard.set(encoded, forKey: "completedBodyParts")
+                UserDefaults.standard.set(Date(), forKey: "lastCompletionDate")
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -17,7 +25,8 @@ struct DailyMovementView: View {
                 .padding(.top)
             }
             .navigationTitle("Daily Movement")
-            .onChange(of: showingExerciseDetail) { isShowing in
+            .onAppear(perform: loadCompletedBodyParts)
+            .onChange(of: showingExerciseDetail) { _, isShowing in
                 if !isShowing {
                     // Clean up when sheet is dismissed
                     DispatchQueue.main.async {
@@ -35,7 +44,17 @@ struct DailyMovementView: View {
                                 selectedExercise = nil
                             },
                             trailing: Button("Complete") {
-                                handleExerciseCompletion()
+                                if let bodyPart = selectedBodyPart {
+                                    completedBodyParts.insert(bodyPart)
+                                    
+                                    // Post notification for progress tracking
+                                    NotificationCenter.default.post(
+                                        name: Notification.Name("exerciseCompleted"),
+                                        object: selectedExercise
+                                    )
+                                }
+                                selectedExercise = nil
+                                showingExerciseDetail = false
                             }
                             .foregroundColor(SuperhumanTheme.primaryColor)
                             .font(.headline)
@@ -102,45 +121,27 @@ struct DailyMovementView: View {
                 BodyPartCard(
                     bodyPart: bodyPart,
                     isCompleted: completedBodyParts.contains(bodyPart)
-                ) {
-                    handleBodyPartSelection(bodyPart)
+                )
+                .onTapGesture {
+                    selectedBodyPart = bodyPart
+                    showingExerciseDetail = true
+                    selectedExercise = viewModel.getRandomExercise(for: bodyPart)
                 }
             }
         }
-        .padding(.horizontal)
+        .padding()
     }
     
-    private func handleBodyPartSelection(_ bodyPart: BodyPart) {
-        if let exercise = viewModel.getRandomExercise(for: bodyPart) {
-            selectedBodyPart = bodyPart
-            selectedExercise = exercise // This will automatically trigger the sheet
-        }
-    }
-    
-    private func handleExerciseCompletion() {
-        withAnimation(.spring()) {
-            if let bodyPart = selectedBodyPart {
-                completedBodyParts.insert(bodyPart)
+    private func loadCompletedBodyParts() {
+        if let savedData = UserDefaults.standard.data(forKey: "completedBodyParts"),
+           let decoded = try? JSONDecoder().decode(Set<BodyPart>.self, from: savedData) {
+            if let lastCompletionDate = UserDefaults.standard.object(forKey: "lastCompletionDate") as? Date,
+               !Calendar.current.isDateInToday(lastCompletionDate) {
+                // Reset if it's a new day
+                completedBodyParts = []
+            } else {
+                completedBodyParts = decoded
             }
-        }
-        
-        // Debug print
-        print("Completing exercise...")
-        
-        // Post notification for progress tracking
-        if let exercise = selectedExercise {
-            print("Posting notification for exercise: \(exercise.name)")
-            NotificationCenter.default.post(
-                name: Notification.Name("exerciseCompleted"), // Use exact string
-                object: exercise
-            )
-        }
-        
-        selectedExercise = nil
-        
-        // Save completed body parts
-        if let data = try? JSONEncoder().encode(Array(completedBodyParts)) {
-            UserDefaults.standard.set(data, forKey: "completedBodyParts")
         }
     }
 }
@@ -148,47 +149,29 @@ struct DailyMovementView: View {
 struct BodyPartCard: View {
     let bodyPart: BodyPart
     let isCompleted: Bool
-    let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 16) {
-                ZStack {
-                    Circle()
-                        .fill(isCompleted ? SuperhumanTheme.primaryColor : Color.gray.opacity(0.2))
-                        .frame(width: 60, height: 60)
-                    
-                    Image(systemName: iconName(for: bodyPart))
-                        .font(.system(size: 24))
-                        .foregroundColor(isCompleted ? .black : .white)
-                }
-                
-                Text(bodyPart.rawValue)
-                    .font(.subheadline)
-                    .foregroundColor(isCompleted ? SuperhumanTheme.primaryColor : .white)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.white.opacity(0.05))
-            .cornerRadius(20)
+        VStack {
+            Image(systemName: bodyPart.iconName)
+                .font(.system(size: 30))
+                .foregroundColor(isCompleted ? .green : .white)
+            
+            Text(bodyPart.rawValue)
+                .font(.headline)
+                .foregroundColor(isCompleted ? .green : .white)
         }
-    }
-    
-    private func iconName(for bodyPart: BodyPart) -> String {
-        switch bodyPart {
-        case .wrists: return "hand.raised.circle.fill"
-        case .neck: return "person.bust.circle.fill"
-        case .genitals: return "figure.core.training.circle.fill"
-        case .ankles: return "figure.walk.circle.fill"
-        case .lowerBack: return "figure.archery.circle.fill"
-        case .jaw: return "face.smiling.inverse"
-        case .hips: return "figure.mixed.cardio.circle.fill"
-        case .shoulders: return "figure.strengthtraining.traditional.circle.fill"
-        case .eyes: return "eye.circle.fill"
-        }
+        .frame(maxWidth: .infinity)
+        .aspectRatio(1, contentMode: .fit)
+        .padding()
+        .background(Color.white.opacity(0.05))
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(isCompleted ? Color.green : Color.clear, lineWidth: 2)
+        )
     }
 }
 
 #Preview {
     DailyMovementView()
-} 
+}

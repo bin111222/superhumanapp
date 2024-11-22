@@ -5,7 +5,6 @@ import UIKit
 class ProgressViewModel: ObservableObject {
     @Published var bodyPartProgress: [BodyPart: Double] = [:]
     @Published var mentalWellnessProgress: [MentalWellnessType: Double] = [:]
-    @Published var selectedTimeFrame: TimeFrame = .week
     @Published var consistencyScore: Double = 0
     @Published var currentStreak: Int = 0
     
@@ -14,11 +13,6 @@ class ProgressViewModel: ObservableObject {
             saveProgress()
             updateCalculatedMetrics()
         }
-    }
-    
-    enum TimeFrame: String, CaseIterable {
-        case week = "Week"
-        case month = "Month"
     }
     
     enum MentalWellnessType: String, CaseIterable {
@@ -153,85 +147,82 @@ class ProgressViewModel: ObservableObject {
     }
     
     private func updateBodyPartProgress() {
-        let timeFrame = getTimeFrameDates()
         let calendar = Calendar.current
         let now = Date()
+        let weekStart = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
         
-        // Get all exercises within the time frame
+        // Get all exercises within the week
         let recentExercises = progressData.exerciseHistory.filter { 
-            $0.completionDate >= timeFrame.start && $0.completionDate <= timeFrame.end 
+            $0.completionDate >= weekStart && $0.completionDate <= now 
         }
         
-        // Group exercises by date (to count days where exercises were done)
-        let exerciseDates = Set(recentExercises.map { 
-            calendar.startOfDay(for: $0.completionDate)
-        })
-        
-        // Calculate total possible days
-        let totalDays: Double
-        switch selectedTimeFrame {
-        case .week:
-            totalDays = 7
-        case .month:
-            totalDays = 30
-        }
-        
-        // Calculate progress based on days completed
-        let completedDays = Double(exerciseDates.count)
-        let progress = completedDays / totalDays
-        
-        // Update progress for each body part
+        // Calculate progress for each body part separately
         BodyPart.allCases.forEach { bodyPart in
+            // Get exercises for this specific body part
+            let bodyPartExercises = recentExercises.filter { $0.bodyPart == bodyPart }
+            
+            // Get unique days where this body part was exercised
+            let exerciseDates = Set(bodyPartExercises.map { 
+                calendar.startOfDay(for: $0.completionDate)
+            })
+            
+            // Calculate progress for this body part (7 days for the week)
+            let completedDays = Double(exerciseDates.count)
+            let progress = completedDays / 7.0
+            
+            // Update progress for this specific body part
             bodyPartProgress[bodyPart] = min(1.0, progress)
         }
     }
     
     private func updateConsistencyScore() {
-        let timeFrame = getTimeFrameDates()
         let calendar = Calendar.current
-        let totalDays = calendar.dateComponents([.day], from: timeFrame.start, to: timeFrame.end).day ?? 1
+        let now = Date()
+        let weekStart = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
         
         let exerciseDays = Set(progressData.exerciseHistory
-            .filter { $0.completionDate >= timeFrame.start && $0.completionDate <= timeFrame.end }
+            .filter { $0.completionDate >= weekStart && $0.completionDate <= now }
             .map { calendar.startOfDay(for: $0.completionDate) }
         ).count
         
-        consistencyScore = Double(exerciseDays) / Double(totalDays)
-    }
-    
-    private func getTimeFrameDates() -> (start: Date, end: Date) {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        let start: Date
-        switch selectedTimeFrame {
-        case .week:
-            start = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-        case .month:
-            start = calendar.date(byAdding: .month, value: -1, to: now) ?? now
-        }
-        
-        return (start: start, end: now)
+        consistencyScore = Double(exerciseDays) / 7.0
     }
     
     private func saveProgress() {
+        // Save exercise progress
         if let encoded = try? JSONEncoder().encode(progressData) {
             UserDefaults.standard.set(encoded, forKey: "exerciseProgress")
         }
-        UserDefaults.standard.set(mentalWellnessProgress, forKey: "mentalWellnessProgress")
+        
+        // Convert mental wellness progress to a codable dictionary and encode
+        let codableDict = mentalWellnessProgress.mapKeys { $0.rawValue }
+        if let encoded = try? JSONEncoder().encode(codableDict) {
+            UserDefaults.standard.set(encoded, forKey: "mentalWellnessProgress")
+        }
     }
     
-    func loadProgress() {
+    private func loadProgress() {
+        // Load exercise progress
         if let savedData = UserDefaults.standard.data(forKey: "exerciseProgress"),
            let decoded = try? JSONDecoder().decode(ProgressData.self, from: savedData) {
             progressData = decoded
             updateCalculatedMetrics()
         }
         
-        if let savedMentalProgress = UserDefaults.standard.dictionary(forKey: "mentalWellnessProgress") as? [String: Double] {
-            MentalWellnessType.allCases.forEach { type in
-                mentalWellnessProgress[type] = savedMentalProgress[type.rawValue] ?? 0
-            }
+        // Load mental wellness progress
+        if let savedData = UserDefaults.standard.data(forKey: "mentalWellnessProgress"),
+           let decodedDict = try? JSONDecoder().decode([String: Double].self, from: savedData) {
+            // Convert string keys back to enum cases
+            mentalWellnessProgress = Dictionary(uniqueKeysWithValues: decodedDict.compactMap { key, value in
+                guard let type = MentalWellnessType(rawValue: key) else { return nil }
+                return (type, value)
+            })
         }
     }
-} 
+}
+
+extension Dictionary {
+    func mapKeys<T>(_ transform: (Key) -> T) -> Dictionary<T, Value> {
+        Dictionary<T, Value>(uniqueKeysWithValues: map { (transform($0.key), $0.value) })
+    }
+}

@@ -10,7 +10,7 @@ struct OnboardingView: View {
         OnboardingPage(
             image: "Superhuman",
             isSystemImage: false,
-            title: "Ready to be a Superhuman?",
+            title: "Journey to Superhuman",
             description: "30 minutes a day can transform your life."
         ),
         OnboardingPage(

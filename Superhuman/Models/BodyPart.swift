@@ -13,6 +13,29 @@ enum BodyPart: String, Codable, CaseIterable, Identifiable {
     
     var id: String { rawValue }
     
+    var iconName: String {
+        switch self {
+        case .wrists:
+            return "hand.raised"
+        case .neck:
+            return "person.bust"
+        case .genitals:
+            return "figure.stand"
+        case .ankles:
+            return "figure.walk"
+        case .lowerBack:
+            return "figure.arms.open"
+        case .jaw:
+            return "mouth"
+        case .hips:
+            return "figure.stand"
+        case .shoulders:
+            return "person.fill"
+        case .eyes:
+            return "eye"
+        }
+    }
+    
     var description: String {
         switch self {
         case .wrists:
