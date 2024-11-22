@@ -8,7 +8,8 @@ struct OnboardingView: View {
     
     let onboardingPages = [
         OnboardingPage(
-            image: "figure.run.treadmill",
+            image: "Superhuman",
+            isSystemImage: false,
             title: "Ready to be a Superhuman?",
             description: "30 minutes a day can transform your life."
         ),
@@ -29,22 +30,26 @@ struct OnboardingView: View {
             if viewModel.showUserDetails {
                 UserDetailsView(viewModel: viewModel, shouldShowMainContent: $shouldShowMainContent)
             } else {
-                TabView(selection: $currentPage) {
-                    ForEach(0..<onboardingPages.count, id: \.self) { index in
-                        OnboardingPageView(page: onboardingPages[index]) {
-                            if index == onboardingPages.count - 1 {
-                                viewModel.showUserDetails = true
-                            } else {
-                                withAnimation {
-                                    currentPage += 1
+                ZStack {
+                    AnimatedMeshGradient()
+                    
+                    TabView(selection: $currentPage) {
+                        ForEach(0..<onboardingPages.count, id: \.self) { index in
+                            OnboardingPageView(page: onboardingPages[index]) {
+                                if index == onboardingPages.count - 1 {
+                                    viewModel.showUserDetails = true
+                                } else {
+                                    withAnimation {
+                                        currentPage += 1
+                                    }
                                 }
                             }
+                            .tag(index)
                         }
-                        .tag(index)
                     }
+                    .tabViewStyle(.page)
+                    .indexViewStyle(.page(backgroundDisplayMode: .always))
                 }
-                .tabViewStyle(.page)
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
             }
         }
         .fullScreenCover(isPresented: $shouldShowMainContent) {
@@ -59,14 +64,24 @@ struct OnboardingPageView: View {
     let action: () -> Void
     
     var body: some View {
-        VStack(spacing: 90) {
+        VStack(spacing: 50) {
             Spacer()
             
-            Image(systemName: page.image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 150, height: 150)
-                .foregroundColor(SuperhumanTheme.primaryColor)
+            Group {
+                if page.isSystemImage {
+                    Image(systemName: page.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                        .foregroundColor(.white)
+                } else {
+                    Image(page.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 400, height: 400)
+                       
+                }
+            }
             
             VStack(spacing: 16) {
                 Text(page.title)
@@ -76,7 +91,7 @@ struct OnboardingPageView: View {
                 Text(page.description)
                     .font(.body)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white.opacity(0.7))
             }
             .padding()
             

@@ -4,8 +4,16 @@ import SwiftUI
 struct OnboardingPage: Identifiable {
     let id = UUID()
     let image: String
+    let isSystemImage: Bool
     let title: String
     let description: String
+    
+    init(image: String, isSystemImage: Bool = true, title: String, description: String) {
+        self.image = image
+        self.isSystemImage = isSystemImage
+        self.title = title
+        self.description = description
+    }
 }
 
 // MARK: - Components
